@@ -13,15 +13,6 @@
         <module name="auth" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="ask" target="17" />
-      <module name="service" target="17" />
-      <module name="service1" target="17" />
-    </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="service1" options="" />
-    </option>
+    <bytecodeTargetLevel target="20" />
   </component>
 </project>

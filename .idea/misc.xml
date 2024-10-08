@@ -16,5 +16,5 @@
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_21_PREVIEW" project-jdk-name="homebrew-21" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" project-jdk-name="corretto-21" project-jdk-type="JavaSDK" />
 </project>

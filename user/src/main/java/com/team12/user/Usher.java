@@ -14,14 +14,6 @@ import lombok.NoArgsConstructor;
 public class Usher {
 
     @Id
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence"
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "user_sequence"
-    )
     private Integer id;
     private String username;
     private String password;
