@@ -17,13 +17,12 @@ public class  UserService {
     private final UserRepository userRepository;
 
     public void registerUser(UserRegistrationRequest request) {
-        Usher user = Usher.builder()
+        User user = User.builder()
                 .username(request.username())
-                .password(request.password())
+                .passwordHash(request.password())
                 .email(request.email())
                 .build();
 
-        // TO DO : check if userid form auth service is valid
         log.info("Feign Client call success {}",authClient.checkAuth(1));
 
         userRepository.save(user);

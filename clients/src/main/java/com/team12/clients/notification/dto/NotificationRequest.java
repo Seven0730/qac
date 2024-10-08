@@ -1,7 +1,9 @@
 package com.team12.clients.notification.dto;
 
+import java.util.UUID;
+
 public record NotificationRequest(
-        Integer toUserId,
+        UUID toUserId,
         String message,
         String toUserEmail
 ){

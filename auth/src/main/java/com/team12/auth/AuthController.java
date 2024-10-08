@@ -17,9 +17,4 @@ public class AuthController {
         return "false";
     }
 
-//    @GetMapping
-//    public String getAuth() {
-//        return "string";
-//    }
-
 }

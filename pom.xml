@@ -16,6 +16,10 @@
     <module>auth</module>
     <module>clients</module>
     <module>notification</module>
+    <module>search</module>
+    <module>QnA</module>
+    <module>vote</module>
+    <module>event</module>
   </modules>
 
   <properties>
