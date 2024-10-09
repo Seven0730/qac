@@ -23,8 +23,6 @@ public class  UserService {
                 .email(request.email())
                 .build();
 
-        log.info("Feign Client call success {}",authClient.checkAuth(1));
-
         userRepository.save(user);
 
         notificationClient.sendNotification(new NotificationRequest(

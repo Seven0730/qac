@@ -13,9 +13,7 @@
 
   <modules>
     <module>user</module>
-    <module>auth</module>
     <module>clients</module>
-    <module>notification</module>
     <module>search</module>
     <module>QnA</module>
     <module>vote</module>
