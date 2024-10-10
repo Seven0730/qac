@@ -3,6 +3,8 @@ package com.team12.user;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
 
+import com.team12.clients.user.dto.UserLoginRequest;
+import com.team12.clients.user.dto.UserRegistrationRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,5 +31,10 @@ public class  UserService {
                 "User registered",
                 request.email()
         ));
+    }
+
+    public boolean authenticateUser(UserLoginRequest userLoginRequest) {
+        User user = userRepository.findByUsername(userLoginRequest.username());
+        return user != null && user.getPasswordHash().equals(userLoginRequest.password());
     }
 }
