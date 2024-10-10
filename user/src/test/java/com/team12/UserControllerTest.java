@@ -48,7 +48,7 @@ class UserControllerTest {
 
     @Test
     void loginUser_failedLogin() {
-        UserLoginRequest request = new UserLoginRequest("username", "wrong_password");
+        UserLoginRequest request = new UserLoginRequest("username", "1wrong_password");
         when(userService.authenticateUser(request)).thenReturn(false);
 
         ResponseEntity<String> response = userController.loginUser(request);
