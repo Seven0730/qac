@@ -1,10 +1,7 @@
 package com.team12.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -21,5 +18,10 @@ public class UserController{
     public void registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest) {
         log.info("Registering user: {}", userRegistrationRequest);
         userService.registerUser(userRegistrationRequest);
+    }
+
+    @GetMapping
+    public void getUser(@RequestParam String username) {
+        log.info("Getting user: {}", username);
     }
 }

@@ -1,6 +1,7 @@
 package com.team12.event.notification;
 
 import com.team12.clients.notification.dto.NotificationRequest;
+import com.team12.clients.user.UserClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
