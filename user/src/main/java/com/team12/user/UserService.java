@@ -1,8 +1,8 @@
 package com.team12.user;
 
-import com.team12.clients.auth.AuthClient;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class  UserService {
 
-    private final AuthClient authClient;
     private final NotificationClient notificationClient;
     private final UserRepository userRepository;
 
