@@ -1,5 +1,7 @@
 package com.team12.question;
 
+import com.team12.clients.qna.question.dto.QuestionCreateRequest;
+import com.team12.clients.qna.question.dto.QuestionUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,14 +42,20 @@ public class QuestionController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Question> updateQuestion(@RequestBody Question question) {
-        Question updatedQuestion = questionService.updateQuestion(question);
+    public ResponseEntity<Question> updateQuestion(@RequestBody QuestionUpdateRequest request) {
+        Question updatedQuestion = questionService.updateQuestion(request);
         return ResponseEntity.ok(updatedQuestion);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Question> addQuestion(@RequestBody Question question) {
-        Question newQuestion = questionService.addQuestion(question);
+    public ResponseEntity<Question> addQuestion(@RequestBody QuestionCreateRequest request) {
+        Question newQuestion = questionService.addQuestion(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(newQuestion);
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<Question>> getQuestionsByOwnerId(@PathVariable String ownerId) {
+        List<Question> questions = questionService.getQuestionsByOwnerId(ownerId);
+        return ResponseEntity.ok(questions);
     }
 }
