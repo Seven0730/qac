@@ -1,12 +1,10 @@
-package com.team12;
+package com.team12.user;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.team12.clients.user.dto.UserLoginRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
-import com.team12.user.UserController;
-import com.team12.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
