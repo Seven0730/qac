@@ -18,6 +18,7 @@
     <module>QnA</module>
     <module>vote</module>
     <module>event</module>
+    <module>gateway</module>
   </modules>
 
   <properties>
