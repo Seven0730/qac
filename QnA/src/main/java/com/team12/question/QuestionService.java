@@ -26,18 +26,18 @@ public class QuestionService {
         );
     }
 
-    public Question getQuestionById(int id) {
+    public Question getQuestionById(UUID id) {
         return questionRepository.findById(id).orElse(null);
     }
 
-    public void deleteQuestion(int id) {
+    public void deleteQuestion(UUID id) {
         questionRepository.deleteById(id);
     }
 
     public Question updateQuestion(QuestionUpdateRequest request) {
         return questionRepository.save(
                 Question.builder()
-                        .id(UUID.fromString(request.questionId()))
+                        .id(request.questionId())
                         .title(request.title())
                         .content(request.content())
                         .ownerId(request.ownerId())
@@ -49,7 +49,7 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public List<Question> getQuestionsByOwnerId(String ownerId) {
+    public List<Question> getQuestionsByOwnerId(UUID ownerId) {
         return questionRepository.findByOwnerId(ownerId);
     }
 

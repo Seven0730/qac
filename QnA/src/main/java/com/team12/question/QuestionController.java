@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -26,7 +27,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable int id) {
+    public ResponseEntity<Question> getQuestionById(@PathVariable UUID id) {
         Question question = questionService.getQuestionById(id);
         if (question != null) {
             return ResponseEntity.ok(question);
@@ -36,7 +37,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable int id) {
+    public ResponseEntity<Void> deleteQuestion(@PathVariable UUID id) {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
@@ -54,7 +55,7 @@ public class QuestionController {
     }
 
     @GetMapping("/owner/{ownerId}")
-    public ResponseEntity<List<Question>> getQuestionsByOwnerId(@PathVariable String ownerId) {
+    public ResponseEntity<List<Question>> getQuestionsByOwnerId(@PathVariable UUID ownerId) {
         List<Question> questions = questionService.getQuestionsByOwnerId(ownerId);
         return ResponseEntity.ok(questions);
     }
