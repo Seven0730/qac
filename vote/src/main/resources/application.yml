@@ -5,7 +5,7 @@ spring:
   application:
     name: vote
   datasource:
-    password: 123456
+    password: abc123
     url: jdbc:mysql://localhost:3306/vote # TO DO : Change to Mongodb
     username: root
   jpa:
