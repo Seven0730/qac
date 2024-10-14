@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.team12.clients.user.dto.UserLoginRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
+import com.team12.user.controller.UserController;
+import com.team12.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

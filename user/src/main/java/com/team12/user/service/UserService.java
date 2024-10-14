@@ -1,10 +1,12 @@
-package com.team12.user;
+package com.team12.user.service;
 
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
 
 import com.team12.clients.user.dto.UserLoginRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
+import com.team12.user.entity.User;
+import com.team12.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

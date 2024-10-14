@@ -25,3 +25,5 @@ spring:
         service-name: ${spring.application.name}
         prefer-ip-address: true
         instance-id: ${spring.application.name}
+        heartbeat:
+          enabled: true
