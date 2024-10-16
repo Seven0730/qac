@@ -1,5 +1,6 @@
-package com.team12.event.comment;
+package com.team12.event.comment.repository;
 
+import com.team12.event.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

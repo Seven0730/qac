@@ -1,4 +1,4 @@
-package com.team12.event.comment;
+package com.team12.event.comment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

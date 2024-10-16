@@ -1,4 +1,4 @@
-package com.team12.event.notification;
+package com.team12.event.notification.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +22,6 @@ public class Notification {
     private String sender;
     private String message;
     private LocalDateTime sentAt;
-
-//    private NotificationType notificationType;
+    //private NotificationType notificationType;
 
 }

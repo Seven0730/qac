@@ -1,8 +1,9 @@
-package com.team12.event.comment;
+package com.team12.event.comment.controller;
 
 
 import com.team12.clients.comment.dto.CommentModifyRequest;
 import com.team12.clients.comment.dto.CommentSendRequest;
+import com.team12.event.comment.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
