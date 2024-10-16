@@ -1,0 +1,80 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        heartbeat:
+          enabled: true
+
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:5173"
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 360000
+      routes:
+        - id: comment
+          uri: ${EVENT_ROUTE_URI:http://localhost:8086}
+          predicates:
+            - Path=/comment/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: notification
+          uri: ${EVENT_ROUTE_URI:http://localhost:8086}
+          predicates:
+            - Path=/notification/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: qna
+          uri: ${QNA_ROUTE_URI:http://localhost:8087}
+          predicates:
+            - Path=/QnA/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: search
+          uri: ${SEARCH_ROUTE_URI:http://localhost:8088}
+          predicates:
+            - Path=/search/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: user
+          uri: ${USER_ROUTE_URI:http://localhost:8081}
+          predicates:
+            - Path=/user/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: vote
+          uri: ${VOTE_ROUTE_URI:http://localhost:8085}
+          predicates:
+            - Path=/vote/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+
+  application:
+    name: gateway
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true

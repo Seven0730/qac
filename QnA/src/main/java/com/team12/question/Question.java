@@ -30,7 +30,7 @@ public class Question {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    private String ownerId;
+    private UUID ownerId;
 
 
 }
