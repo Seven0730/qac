@@ -1,13 +1,10 @@
-package com.team12.event.notification;
+package com.team12.event.notification.controller;
 
 import com.team12.clients.notification.dto.NotificationRequest;
-import com.team12.clients.user.UserClient;
+import com.team12.event.notification.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController

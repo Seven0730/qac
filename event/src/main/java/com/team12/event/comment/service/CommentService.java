@@ -1,18 +1,18 @@
-package com.team12.event.comment;
+package com.team12.event.comment.service;
 
 
 import com.team12.clients.comment.dto.CommentModifyRequest;
 import com.team12.clients.comment.dto.CommentSendRequest;
-import com.team12.clients.notification.NotificationClient;
 import com.team12.clients.notification.dto.NotificationRequest;
-import com.team12.event.notification.NotificationService;
+import com.team12.clients.notification.NotificationClient;
+import com.team12.event.comment.entity.Comment;
+import com.team12.event.comment.repository.CommentRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,8 +34,11 @@ public class CommentService {
         commentRepository.save(comment);
 
         // 根据答案 ID 搜索用户
-        /* notificationClient.sendNotification(new NotificationRequest(
-        )); */
+        notificationClient.sendNotification(new NotificationRequest(
+                UUID.randomUUID(),
+                request.content(),
+                "test.com"
+        ));
     }
 
     @Transactional

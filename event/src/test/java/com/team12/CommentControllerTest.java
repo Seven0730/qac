@@ -5,8 +5,8 @@ import static org.mockito.Mockito.*;
 
 import com.team12.clients.comment.dto.CommentModifyRequest;
 import com.team12.clients.comment.dto.CommentSendRequest;
-import com.team12.event.comment.CommentController;
-import com.team12.event.comment.CommentService;
+import com.team12.event.comment.controller.CommentController;
+import com.team12.event.comment.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
