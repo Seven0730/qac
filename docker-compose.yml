@@ -64,3 +64,4 @@ networks:
     mysql_network:
     mongo_network:
     consul_network:
+    rabbitmq_network:
