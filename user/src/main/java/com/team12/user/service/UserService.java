@@ -1,42 +1,43 @@
 package com.team12.user.service;
 
-import com.team12.clients.notification.dto.NotificationRequest;
-import com.team12.clients.notification.NotificationClient;
 
-import com.team12.clients.user.dto.UserLoginRequest;
-import com.team12.clients.user.dto.UserRegistrationRequest;
 import com.team12.user.entity.User;
-import com.team12.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import com.team12.user.repository.UserRepository;
+
+
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 @Slf4j
-public class  UserService {
+public class UserService {
 
-    private final NotificationClient notificationClient;
     private final UserRepository userRepository;
 
-    public void registerUser(UserRegistrationRequest request) {
-        User user = User.builder()
-                .username(request.username())
-                .passwordHash(request.password())
-                .email(request.email())
-                .build();
-
-        userRepository.save(user);
-
-        notificationClient.sendNotification(new NotificationRequest(
-                user.getId(),
-                "User registered",
-                request.email()
-        ));
+    public User getUserById(UUID id) {
+        return userRepository.findById(id).orElse(null);
     }
 
-    public boolean authenticateUser(UserLoginRequest userLoginRequest) {
-        User user = userRepository.findByUsername(userLoginRequest.username());
-        return user != null && user.getPasswordHash().equals(userLoginRequest.password());
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User updateUser(UUID id, User user) {
+        if (userRepository.existsById(id)) {
+            user.setId(id);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    public boolean deleteUser(UUID id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
