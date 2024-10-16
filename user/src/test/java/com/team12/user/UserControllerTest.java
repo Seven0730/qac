@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.team12.clients.user.dto.UserLoginRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
+import com.team12.user.controller.AuthController;
 import com.team12.user.controller.UserController;
+import com.team12.user.service.AuthService;
 import com.team12.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,44 +16,44 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
-class UserControllerTest {
+class AuthControllerTest {
 
-    private UserService userService;
-    private UserController userController;
+    private AuthService authService;
+    private AuthController authController;
 
     @BeforeEach
     void setUp() {
-        userService = mock(UserService.class);
-        userController = new UserController(userService);
+        authService = mock(AuthService.class);
+        authController = new AuthController(authService);
     }
 
     @Test
-    void registerUser_successfulRegistration() {
-        UserRegistrationRequest request = new UserRegistrationRequest("username", "password", "email");
-        doNothing().when(userService).registerUser(request);
+    void registerAuth_successfulRegistration() {
+        UserRegistrationRequest request = new UserRegistrationRequest("Username", "password", "email");
+        doNothing().when(authService).registerUser(request);
 
-        userController.registerUser(request);
+        authController.registerUser(request);
 
-        verify(userService, times(1)).registerUser(request);
+        verify(authService, times(1)).registerUser(request);
     }
 
     @Test
-    void loginUser_successfulLogin() {
-        UserLoginRequest request = new UserLoginRequest("username", "password");
-        when(userService.authenticateUser(request)).thenReturn(true);
+    void loginAuth_successfulLogin() {
+        UserLoginRequest request = new UserLoginRequest("Username", "password");
+        when(authService.authenticateUser(request)).thenReturn(true);
 
-        ResponseEntity<String> response = userController.loginUser(request);
+        ResponseEntity<String> response = authController.loginUser(request);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Login successful", response.getBody());
     }
 
     @Test
-    void loginUser_failedLogin() {
+    void loginAuth_failedLogin() {
         UserLoginRequest request = new UserLoginRequest("username", "1wrong_password");
-        when(userService.authenticateUser(request)).thenReturn(false);
+        when(authService.authenticateUser(request)).thenReturn(false);
 
-        ResponseEntity<String> response = userController.loginUser(request);
+        ResponseEntity<String> response = authController.loginUser(request);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("Login failed", response.getBody());
