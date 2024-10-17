@@ -20,6 +20,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        log.info("Fetching all users");
+        Iterable<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable UUID id) {
         log.info("Fetching user with id: {}", id);
