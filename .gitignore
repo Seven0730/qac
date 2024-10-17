@@ -7,12 +7,6 @@ logs/
 
 # Target directory
 target/
-clients/target/
-event/target/
-QnA/target/
-search/target/
-user/target/
-vote/target/
 
 # Maven specific files
 pom.xml.tag
