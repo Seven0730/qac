@@ -1,0 +1,29 @@
+services:
+  api-gateway:
+    build: gateway/
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - qac_default
+
+  consul:
+    image: consul:1.15.4
+    container_name: consul-container
+    restart: always
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    command: consul agent -server -bootstrap-expect=1 -ui -client=0.0.0.0 -data-dir=/consul/data
+    networks:
+      - qac_default
+    volumes:
+      - consul_data:/consul/data
+
+volumes:
+  consul_data:
+
+networks:
+  qac_default:
+    driver: bridge
+    name: qac_default
