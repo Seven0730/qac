@@ -7,6 +7,12 @@ services:
     networks:
       - qac_default
 
+  qna:
+    build: QnA/
+    container_name: qna
+    networks:
+      - qac_default
+
   consul:
     image: consul:1.15.4
     container_name: consul-container

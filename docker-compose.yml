@@ -14,7 +14,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - mysql_network
+      - qac_default
 
   mongodb:
     image: mongo
@@ -53,3 +53,6 @@ networks:
     mongo_network:
     consul_network:
     rabbitmq_network:
+    qac_default:
+      driver: bridge
+      name: qac_default
