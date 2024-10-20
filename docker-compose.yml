@@ -12,8 +12,9 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - mysql_network
+      - qac_default
 
   mongodb:
     image: mongo
@@ -28,19 +29,6 @@ services:
       - mongo_data:/data/db
     networks:
       - mongo_network
-
-  consul:
-    image: consul:1.15.4
-    container_name: consul-container
-    restart: always
-    ports:
-      - "8500:8500"
-      - "8600:8600/udp"
-    command: consul agent -server -bootstrap-expect=1 -ui -client=0.0.0.0 -data-dir=/consul/data
-    networks:
-      - consul_network
-    volumes:
-      - consul_data:/consul/data
 
   rabbitmq:
     image: rabbitmq:3.11-management
@@ -65,3 +53,6 @@ networks:
     mongo_network:
     consul_network:
     rabbitmq_network:
+    qac_default:
+      driver: bridge
+      name: qac_default

@@ -1,28 +1,13 @@
 spring:
-  profiles:
-    active: cloud
   cloud:
     consul:
       discovery:
         heartbeat:
           enabled: true
+      host: consul
+      port: 8500
 
     gateway:
-      globalcors:
-        add-to-simple-url-handler-mapping: true
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins:
-              - "http://localhost:5173"
-            allowedMethods:
-              - "GET"
-              - "POST"
-              - "DELETE"
-              - "PUT"
-              - "OPTIONS"
-            allowedHeaders: "*"
-            allowCredentials: true
-            maxAge: 360000
       routes:
         - id: comment
           uri: lb://event
