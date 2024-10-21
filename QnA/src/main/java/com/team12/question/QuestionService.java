@@ -45,6 +45,13 @@ public class QuestionService {
         );
     }
 
+
+    public List<Question> searchQuestions(String keyword) {
+        return questionRepository.searchByKeyword(keyword);
+    }
+    public List<Question> searchQuestionsByContent(String content) {
+        return questionRepository.searchByKeyword(content);
+    }
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
