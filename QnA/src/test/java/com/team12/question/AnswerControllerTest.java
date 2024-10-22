@@ -1,3 +1,4 @@
+// AnswerControllerTest.java
 package com.team12.question;
 
 import com.team12.answer.Answer;
@@ -34,7 +35,9 @@ public class AnswerControllerTest {
     @Test
     void createAnswer_returnsCreatedAnswer() {
         UUID id = UUID.randomUUID();
-        Answer answer = new Answer(id, "Test content", null, "user123", "question123");
+        UUID userId = UUID.randomUUID();
+        UUID questionId = UUID.randomUUID();
+        Answer answer = new Answer(id, "Test content", null, userId, questionId);
         when(answerService.createAnswer(any(Answer.class))).thenReturn(answer);
 
         ResponseEntity<Answer> response = answerController.createAnswer(answer);
@@ -57,7 +60,7 @@ public class AnswerControllerTest {
     @Test
     void getAnswerById_returnsAnswer_whenFound() {
         UUID id = UUID.randomUUID();
-        Answer answer = new Answer(id, "Test content", null, "user123", "question123");
+        Answer answer = new Answer(id, "Test content", null, UUID.randomUUID(), UUID.randomUUID());
         when(answerService.getAnswerById(id)).thenReturn(Optional.of(answer));
 
         ResponseEntity<Answer> response = answerController.getAnswerById(id);
@@ -79,7 +82,7 @@ public class AnswerControllerTest {
     @Test
     void updateAnswer_updatesAndReturnsAnswer() {
         UUID id = UUID.randomUUID();
-        Answer updatedAnswer = new Answer(id, "Updated content", null, "user123", "question123");
+        Answer updatedAnswer = new Answer(id, "Updated content", null, UUID.randomUUID(), UUID.randomUUID());
         when(answerService.updateAnswer(eq(id), any(Answer.class))).thenReturn(updatedAnswer);
 
         ResponseEntity<Answer> response = answerController.updateAnswer(id, updatedAnswer);
