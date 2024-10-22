@@ -1,5 +1,7 @@
 package com.team12.vote;
 
+import com.team12.clients.vote.dto.HasUserVotedRequest;
+import com.team12.clients.vote.dto.VoteRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +22,9 @@ public class VoteController {
         click upvote button
      */
     @PostMapping("/upvote/{postId}")
-    public ResponseEntity<String> clickUpvote(@RequestParam UUID userId,
-                                         @PathVariable UUID postId,
-                                         @RequestParam PostType postType) {
+    public ResponseEntity<String> clickUpvote(VoteRequest voteRequest) {
         try {
-            voteService.clickUpvote(userId, postId, postType);
+            voteService.clickUpvote(voteRequest);
             return ResponseEntity.ok("Vote successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,11 +35,9 @@ public class VoteController {
         click downvote button
      */
     @PostMapping("/downvote/{postId}")
-    public ResponseEntity<String> clickDownvote(@RequestParam UUID userId,
-                                                @PathVariable UUID postId,
-                                                @RequestParam PostType postType) {
+    public ResponseEntity<String> clickDownvote(VoteRequest voteRequest) {
         try {
-            voteService.clickDownvote(userId, postId, postType);
+            voteService.clickDownvote(voteRequest);
             return ResponseEntity.ok("Vote successfully.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -71,8 +69,8 @@ public class VoteController {
         0: has not voted
     */
     @GetMapping("/has-voted/{postId}")
-    public ResponseEntity<Integer> hasUserVoted(@RequestParam UUID userId, @PathVariable UUID postId) {
-        int hasVoted = voteService.hasUserVoted(userId, postId);
+    public ResponseEntity<Integer> hasUserVoted(HasUserVotedRequest hasUserVotedRequest) {
+        int hasVoted = voteService.hasUserVoted(hasUserVotedRequest);
         return ResponseEntity.ok(hasVoted);
     }
 }

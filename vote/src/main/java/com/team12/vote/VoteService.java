@@ -1,5 +1,9 @@
 package com.team12.vote;
 
+//import com.team12.clients.notification.NotificationClient;
+//import com.team12.clients.notification.dto.NotificationRequest;
+import com.team12.clients.vote.dto.HasUserVotedRequest;
+import com.team12.clients.vote.dto.VoteRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,14 +17,21 @@ import java.util.UUID;
 @Slf4j
 public class VoteService {
     private final VoteRepository voteRepository;
+    //private final NotificationClient notificationClient;
 
     @Transactional
-    public void clickUpvote(UUID userId, UUID postId, PostType postType) {
+    public void clickUpvote(VoteRequest voteRequest) {
+        UUID userId = voteRequest.userId();
+        UUID postId = voteRequest.postId();
+        PostType postType = PostType.valueOf(voteRequest.postType().name());
+
         Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(userId, postId);
         if (existingVote.isEmpty()) {
             // user has not voted, add upvote
             createVote(userId, postId, postType, 1); // 1 for upvote
             log.info("User {} upvote post {}", userId, postId);
+
+            sendNotification(voteRequest);
         } else {
             // user has voted, check if it is up or down
             Vote vote = existingVote.get();
@@ -33,12 +44,18 @@ public class VoteService {
                 vote.setVoteValue(1);
                 voteRepository.save(vote);
                 log.info("User {} turn downvote into upvote from post {}", userId, postId);
+
+                sendNotification(voteRequest);
             }
         }
     }
 
     @Transactional
-    public void clickDownvote(UUID userId, UUID postId, PostType postType) {
+    public void clickDownvote(VoteRequest voteRequest) {
+        UUID userId = voteRequest.userId();
+        UUID postId = voteRequest.postId();
+        PostType postType = PostType.valueOf(voteRequest.postType().name());
+
         Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(userId, postId);
         if (existingVote.isEmpty()) {
             // user has not voted, add downvote
@@ -75,7 +92,10 @@ public class VoteService {
         return voteRepository.countByPostIdAndVoteValue(postId,voteValue);
     }
 
-    public int hasUserVoted(UUID userId, UUID postId) {
+    public int hasUserVoted(HasUserVotedRequest hasUserVotedRequest) {
+        UUID userId = hasUserVotedRequest.userId();
+        UUID postId = hasUserVotedRequest.postId();
+
         Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(userId, postId);
         return existingVote.map(Vote::getVoteValue).orElse(0);
         /*
@@ -101,5 +121,10 @@ public class VoteService {
                 .build();
 
         return voteRepository.save(newVote);
+    }
+
+    private void sendNotification(VoteRequest voteRequest) {
+        //NotificationRequest notificationRequest = new NotificationRequest(voteRequest.authorId(), "You receive a new upvote.", voteRequest.authorEmail());
+        //notificationClient.sendNotification(notificationRequest);
     }
 }
