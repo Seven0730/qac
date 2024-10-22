@@ -24,8 +24,8 @@ public class Answer {
 
     private LocalDateTime createdAt;
 
-    private UUID ownerId;
+    private String ownerId;
 
-    private UUID questionId;
+    private String questionId;
 
 }

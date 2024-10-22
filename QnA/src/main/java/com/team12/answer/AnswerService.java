@@ -41,9 +41,4 @@ public class AnswerService {
     public void deleteAnswer(UUID id) {
         answerRepository.deleteById(id);
     }
-
-    public List<Answer> getAnswersByQuestionId(UUID questionId) {
-        return answerRepository.findByQuestionId(questionId);
-    }
-
 }
