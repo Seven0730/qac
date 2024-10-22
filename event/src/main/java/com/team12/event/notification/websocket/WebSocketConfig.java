@@ -15,9 +15,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
         config.setUserDestinationPrefix("/user");
     }
 
-    //在整体配置好跨域之后删除setAllowedOrigins("http://localhost:3000")，仅用作本地测试
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:3000").withSockJS();
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 }

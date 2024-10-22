@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/answers")
+@RequestMapping("/api/v1/QnA/answers")
 public class AnswerController {
 
     @Autowired

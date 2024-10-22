@@ -1,4 +1,4 @@
-package com.team12.event.notification.entity;
+package com.team12.clients.notification.dto;
 
 public enum NotificationType {
     ANSWER_POSTED,
