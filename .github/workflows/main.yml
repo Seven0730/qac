@@ -1,6 +1,6 @@
 name: Trigger Jenkins Job
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   call-jenkins-build:
