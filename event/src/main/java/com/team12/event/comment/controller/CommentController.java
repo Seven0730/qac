@@ -50,8 +50,4 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found");
         }
     }
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.team12.clients.qna.answer;
+package com.team12.clients.qna.answer.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
