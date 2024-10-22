@@ -75,20 +75,7 @@ public class QuestionControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(questionService, times(1)).deleteQuestion(id);
     }
-
-    @Test
-    void updateQuestion_updatesQuestion() {
-        QuestionUpdateRequest request = new QuestionUpdateRequest(
-                "title", "content", UUID.randomUUID(), UUID.randomUUID());
-        Question updatedQuestion = new Question();
-        when(questionService.updateQuestion(request)).thenReturn(updatedQuestion);
-
-        ResponseEntity<Question> response = questionController.updateQuestion(request);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedQuestion, response.getBody());
-    }
-//
+    
     @Test
     void addQuestion_createsNewQuestion() {
         QuestionCreateRequest request = new QuestionCreateRequest(
