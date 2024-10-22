@@ -1,19 +1,32 @@
 name: Trigger Jenkins Job
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-  call-jenkins-build:
+  maven-build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Trigger Jenkins Job via API
-      env:
-        JENKINS_URL: ${{ secrets.JENKINS_URL }}
-        JENKINS_USER: ${{ secrets.JENKINS_USER }}
-        JENKINS_API_TOKEN: ${{ secrets.JENKINS_API_TOKEN }}
-        JOB_NAME: ${{ secrets.JOB_NAME }}
-        JOB_TOKEN: ${{ secrets.JOB_TOKEN }}
-      run: |
-        curl -X POST -L --user "${JENKINS_USER}:${JENKINS_API_TOKEN}" \
-        "${JENKINS_URL}/job/${JOB_NAME}/build?token=${JOB_TOKEN}"
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml -DskipTests=true
+
+  call-jenkins-build:
+    needs: maven-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Jenkins Job via API
+        env:
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}
+          JENKINS_API_TOKEN: ${{ secrets.JENKINS_API_TOKEN }}
+          JOB_NAME: ${{ secrets.JOB_NAME }}
+          JOB_TOKEN: ${{ secrets.JOB_TOKEN }}
+        run: |
+          curl -X POST -L --user "${JENKINS_USER}:${JENKINS_API_TOKEN}" \
+          "${JENKINS_URL}/job/${JOB_NAME}/build?token=${JOB_TOKEN}"
