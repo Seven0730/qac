@@ -1,15 +1,17 @@
 package com.team12.vote;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
 
-@Entity
-@Table
+@Document(collection = "vote")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +19,7 @@ import java.util.UUID;
 public class Vote {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private ObjectId id;
 
     private UUID userId;
 
