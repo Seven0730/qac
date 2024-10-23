@@ -9,7 +9,7 @@ spring:
     name: vote
   data:
     mongodb:
-      uri: mongodb+srv://root:hHYVo4WUSPEpg7MZ@qacmongo.m3x0e.mongodb.net/vote?retryWrites=true&w=majority
+      uri: ${MONGODB_URI}
   cloud:
     consul:
       host: localhost
