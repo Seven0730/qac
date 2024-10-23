@@ -1,6 +1,9 @@
 package com.team12.event.notification.rabbitmq;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team12.event.notification.entity.Notification;
+import com.team12.event.notification.entity.NotificationDTO;
 import com.team12.event.notification.websocket.MessagingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +16,24 @@ import org.springframework.stereotype.Component;
 public class RabbitMQListener {
 
     private final MessagingService messagingService;
+    private final ObjectMapper objectMapper; // 注入 ObjectMapper
 
     @RabbitListener(queues = "notification.queue")
     public void receiveMessage(Notification notification) {
-        //Listen rabbitmq queue and send notifi to frontend
-        messagingService.sendMessageToUser(notification.getToUserId(), notification.getMessage());
+        try {
+            NotificationDTO notificationDTO = new NotificationDTO(
+                    notification.getMessage(),
+                    notification.getSentAt(),
+                    notification.getNotificationType()
+            );
 
-        log.info("Forwarded notification to user: {} with message: {}", notification.getToUserId(), notification.getMessage());
+            String notificationJson = objectMapper.writeValueAsString(notificationDTO);
+
+            messagingService.sendMessageToUser(notification.getToUserId(), notificationJson);
+
+            log.info("Forwarded notification to user: {} with message: {}", notification.getToUserId(), notificationJson);
+        } catch (JsonProcessingException e) {
+            log.error("Error while converting notification to JSON", e);
+        }
     }
-
 }

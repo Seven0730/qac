@@ -1,0 +1,23 @@
+name: Trigger Jenkins Job
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+
+jobs:
+  call-jenkins-build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Jenkins Job via API
+        env:
+          JENKINS_URL: ${{ secrets.JENKINS_URL }}
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}
+          JENKINS_API_TOKEN: ${{ secrets.JENKINS_API_TOKEN }}
+          JOB_NAME: ${{ secrets.JOB_NAME }}
+          JOB_TOKEN: ${{ secrets.JOB_TOKEN }}
+        run: |
+          curl -X POST -L --user "${JENKINS_USER}:${JENKINS_API_TOKEN}" \
+          "${JENKINS_URL}/job/${JOB_NAME}/build?token=${JOB_TOKEN}"

@@ -3,6 +3,7 @@ package com.team12.user.service;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
 
+import com.team12.clients.notification.dto.NotificationType;
 import com.team12.clients.user.dto.UserLoginRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
 import com.team12.user.entity.Role;
@@ -33,7 +34,7 @@ public class  AuthService {
         notificationClient.sendNotification(new NotificationRequest(
                 user.getId(),
                 "User registered",
-                request.email()
+                NotificationType.OTHER
         ));
     }
 

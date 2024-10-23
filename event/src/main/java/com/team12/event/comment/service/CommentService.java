@@ -5,6 +5,9 @@ import com.team12.clients.comment.dto.CommentModifyRequest;
 import com.team12.clients.comment.dto.CommentSendRequest;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
+import com.team12.clients.notification.dto.NotificationType;
+import com.team12.clients.qna.answer.dto.AnswerDto;
+import com.team12.clients.qna.AnswerClient;
 import com.team12.event.comment.entity.Comment;
 import com.team12.event.comment.repository.CommentRepository;
 import jakarta.transaction.Transactional;
@@ -21,6 +24,7 @@ import java.util.UUID;
 public class CommentService {
 
     private final NotificationClient notificationClient;
+    private final AnswerClient qnaClient;
     private final CommentRepository commentRepository;
 
     public void commentSend(CommentSendRequest request) {
@@ -33,11 +37,11 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        // 根据答案 ID 搜索用户
+        AnswerDto answer = qnaClient.getAnswerById(request.answerId());
         notificationClient.sendNotification(new NotificationRequest(
-                UUID.randomUUID(),
+                UUID.fromString(answer.ownerId()),
                 request.content(),
-                "test.com"
+                NotificationType.COMMENT_POSTED
         ));
     }
 
