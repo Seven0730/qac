@@ -1,7 +1,7 @@
 package com.team12.vote;
 
-//import com.team12.clients.notification.NotificationClient;
-//import com.team12.clients.notification.dto.NotificationRequest;
+import com.team12.clients.notification.NotificationClient;
+import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.VoteRequest;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Slf4j
 public class VoteService {
     private final VoteRepository voteRepository;
-    //private final NotificationClient notificationClient;
+    private final NotificationClient notificationClient;
 
     @Transactional
     public void clickUpvote(VoteRequest voteRequest) {
@@ -124,7 +124,7 @@ public class VoteService {
     }
 
     private void sendNotification(VoteRequest voteRequest) {
-        //NotificationRequest notificationRequest = new NotificationRequest(voteRequest.authorId(), "You receive a new upvote.", voteRequest.authorEmail());
-        //notificationClient.sendNotification(notificationRequest);
+        NotificationRequest notificationRequest = new NotificationRequest(voteRequest.authorId(), "You receive a new upvote.", voteRequest.authorEmail());
+        notificationClient.sendNotification(notificationRequest);
     }
 }

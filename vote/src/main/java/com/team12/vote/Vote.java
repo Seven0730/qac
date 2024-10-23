@@ -1,5 +1,6 @@
 package com.team12.vote;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,7 @@ public class Vote {
 
     @Id
     // @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private ObjectId id;
 
     private UUID userId;
 

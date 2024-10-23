@@ -6,21 +6,7 @@ spring:
     name: vote
   data:
     mongodb:
-      # uri: mongodb+srv://root:hHYVo4WUSPEpg7MZ@qacmongo.m3x0e.mongodb.net/vote?retryWrites=true&w=majority&appName=qacmongo
       uri: mongodb+srv://root:hHYVo4WUSPEpg7MZ@qacmongo.m3x0e.mongodb.net/vote?retryWrites=true&w=majority
-      database: vote
-#  datasource:
-#    password: 123456
-#    url: jdbc:mysql://localhost:3306/vote # TO DO : Change to Mongodb
-#    username: root
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
-#        format_sql: true
-#    show-sql: true
   cloud:
     consul:
       host: localhost
@@ -32,3 +18,8 @@ spring:
         instance-id: ${spring.application.name}
         heartbeat:
           enabled: true
+
+management:
+  health:
+    mongo:
+      enabled: false
