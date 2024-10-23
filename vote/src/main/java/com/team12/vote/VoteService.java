@@ -2,6 +2,7 @@ package com.team12.vote;
 
 import com.team12.clients.notification.NotificationClient;
 import com.team12.clients.notification.dto.NotificationRequest;
+import com.team12.clients.notification.dto.NotificationType;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.VoteRequest;
 import lombok.AllArgsConstructor;
@@ -124,7 +125,7 @@ public class VoteService {
     }
 
     private void sendNotification(VoteRequest voteRequest) {
-        NotificationRequest notificationRequest = new NotificationRequest(voteRequest.authorId(), "You receive a new upvote.", voteRequest.authorEmail());
+        NotificationRequest notificationRequest = new NotificationRequest(voteRequest.authorId(), "You receive a new upvote.", NotificationType.UPVOTE_RECEIVED);
         notificationClient.sendNotification(notificationRequest);
     }
 }
