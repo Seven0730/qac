@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: cloud
   cloud:
     consul:
       discovery:
@@ -6,6 +8,8 @@ spring:
           enabled: true
 
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
       globalcors:
         add-to-simple-url-handler-mapping: true
         corsConfigurations:
@@ -18,6 +22,7 @@ spring:
               - "DELETE"
               - "PUT"
               - "OPTIONS"
+              - "CONNECT"
             allowedHeaders: "*"
             allowCredentials: true
             maxAge: 360000
@@ -64,7 +69,12 @@ spring:
           filters:
             - PrefixPath=/api/v1
             - AddResponseHeader=X-Powered-By, QnAC Gateway Service
-
+        - id: websocket-route
+          uri: lb://event
+          predicates:
+            - Path=/ws/**
+          filters:
+            - AddResponseHeader=X-Request-Type, WebSocket
   application:
     name: gateway
 

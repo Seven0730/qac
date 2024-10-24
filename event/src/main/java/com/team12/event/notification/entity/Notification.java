@@ -1,5 +1,6 @@
 package com.team12.event.notification.entity;
 
+import com.team12.clients.notification.dto.NotificationType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,10 +19,9 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID toUserId;
-    private String toUserEmail;
     private String sender;
     private String message;
     private LocalDateTime sentAt;
-    //private NotificationType notificationType;
+    private NotificationType notificationType;
 
 }

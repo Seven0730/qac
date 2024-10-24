@@ -1,0 +1,73 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        heartbeat:
+          enabled: true
+      host: consul
+      port: 8500
+
+    gateway:
+      routes:
+        - id: comment
+          uri: lb://event
+          predicates:
+            - Path=/comment/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: notification
+          uri: lb://event
+          predicates:
+            - Path=/notification/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: qna
+          uri: lb://qna
+          predicates:
+            - Path=/QnA/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: search
+          uri: lb://search
+          predicates:
+            - Path=/search/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: user
+          uri: lb://user
+          predicates:
+            - Path=/user/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: vote
+          uri: lb://vote
+          predicates:
+            - Path=/vote/**
+          filters:
+            - PrefixPath=/api/v1
+            - AddResponseHeader=X-Powered-By, QnAC Gateway Service
+        - id: websocket-route
+          uri: lb://event
+          predicates:
+            - Path=/ws/**
+          filters:
+            - AddResponseHeader=X-Request-Type, WebSocket
+
+  application:
+    name: gateway
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true

@@ -9,13 +9,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/answers")
+@RequestMapping("api/v1/QnA/answers")
 public class AnswerController {
 
     @Autowired
     private AnswerService answerService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Answer> createAnswer(@RequestBody Answer answer) {
         Answer createdAnswer = answerService.createAnswer(answer);
         return ResponseEntity.ok(createdAnswer);
@@ -26,6 +26,13 @@ public class AnswerController {
         List<Answer> answers = answerService.getAllAnswers();
         return ResponseEntity.ok(answers);
     }
+    @GetMapping("/by-question/{questionId}")
+    public ResponseEntity<List<Answer>> getAnswersByQuestionId(@PathVariable UUID questionId) {
+        List<Answer> answers = answerService.getAnswersByQuestionId(questionId);
+        return ResponseEntity.ok(answers);
+    }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Answer> getAnswerById(@PathVariable UUID id) {
@@ -39,6 +46,7 @@ public class AnswerController {
         Answer updatedAnswer = answerService.updateAnswer(id, answer);
         return ResponseEntity.ok(updatedAnswer);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAnswer(@PathVariable UUID id) {

@@ -1,7 +1,6 @@
 package com.team12.question;
 
 import com.team12.clients.qna.question.dto.QuestionCreateRequest;
-import com.team12.clients.qna.question.dto.QuestionUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +42,9 @@ public class QuestionController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Question> updateQuestion(@RequestBody QuestionUpdateRequest request) {
-        Question updatedQuestion = questionService.updateQuestion(request);
+    public ResponseEntity<Question> updateQuestion(@RequestBody Question question) {
+        // 直接使用传入的 Question 对象进行更新
+        Question updatedQuestion = questionService.updateQuestion(question);
         return ResponseEntity.ok(updatedQuestion);
     }
 
@@ -57,6 +57,12 @@ public class QuestionController {
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<Question>> getQuestionsByOwnerId(@PathVariable UUID ownerId) {
         List<Question> questions = questionService.getQuestionsByOwnerId(ownerId);
+        return ResponseEntity.ok(questions);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Question>> searchQuestions(@RequestParam String keyword) {
+        List<Question> questions = questionService.searchQuestions(keyword);
         return ResponseEntity.ok(questions);
     }
 }

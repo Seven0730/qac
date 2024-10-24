@@ -1,5 +1,8 @@
 package com.team12.vote;
 
+import com.team12.clients.vote.dto.HasUserVotedRequest;
+import com.team12.clients.vote.dto.PostTypeOfClients;
+import com.team12.clients.vote.dto.VoteRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -24,14 +27,18 @@ public class VoteServiceTest {
 
     private UUID userId;
     private UUID postId;
-    private PostType postType;
+    private PostTypeOfClients postTypeOfClients;
+    private VoteRequest voteRequest;
+    private HasUserVotedRequest hasUserVotedRequest;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         userId = UUID.randomUUID();
         postId = UUID.randomUUID();
-        postType = PostType.QUESTION; // question / answer
+        postTypeOfClients = PostTypeOfClients.QUESTION; // question / answer
+        voteRequest = new VoteRequest(userId, postId, null, null, postTypeOfClients);
+        hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
     }
 
     /*
@@ -43,7 +50,7 @@ public class VoteServiceTest {
     public void testClickUpvote_NoExistingVote_AddUpvote() {
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.empty());
 
-        voteService.clickUpvote(userId, postId, postType);
+        voteService.clickUpvote(voteRequest);
 
         verify(voteRepository, times(1)).save(any(Vote.class)); // Verify that the new vote is saved
         verify(voteRepository, never()).deleteByUserIdAndPostId(any(), any()); // No records were deleted
@@ -55,13 +62,13 @@ public class VoteServiceTest {
         Vote existingVote = Vote.builder()
                 .userId(userId)
                 .postId(postId)
-                .postType(postType)
+                .postType(PostType.valueOf(postTypeOfClients.name()))
                 .voteValue(1) // up
                 .build();
 
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.of(existingVote));
 
-        voteService.clickUpvote(userId, postId, postType);
+        voteService.clickUpvote(voteRequest);
 
         verify(voteRepository, times(1)).deleteByUserIdAndPostId(userId, postId); // Verify that the vote was deleted
         verify(voteRepository, never()).save(any()); // No new records are saved
@@ -73,13 +80,13 @@ public class VoteServiceTest {
         Vote existingVote = Vote.builder()
                 .userId(userId)
                 .postId(postId)
-                .postType(postType)
+                .postType(PostType.valueOf(postTypeOfClients.name()))
                 .voteValue(-1) // down
                 .build();
 
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.of(existingVote));
 
-        voteService.clickUpvote(userId, postId, postType);
+        voteService.clickUpvote(voteRequest);
 
         assertEquals(1, existingVote.getVoteValue()); // Verify that the vote value is updated to 1 (up)
         verify(voteRepository, times(1)).save(existingVote); // Verify that the updated vote is saved
@@ -133,7 +140,7 @@ public class VoteServiceTest {
 
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.of(existingVote));
 
-        int voteValue = voteService.hasUserVoted(userId, postId);
+        int voteValue = voteService.hasUserVoted(hasUserVotedRequest);
 
         // Verify that return value is 1
         assertEquals(1, voteValue);
@@ -145,7 +152,7 @@ public class VoteServiceTest {
     public void testHasUserVoted_UserHasNotVoted() {
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.empty());
 
-        int voteValue = voteService.hasUserVoted(userId, postId);
+        int voteValue = voteService.hasUserVoted(hasUserVotedRequest);
 
         // Verify that return value is 0
         assertEquals(0, voteValue);
