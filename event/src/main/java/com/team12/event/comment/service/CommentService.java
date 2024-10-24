@@ -1,13 +1,12 @@
 package com.team12.event.comment.service;
 
-
 import com.team12.clients.comment.dto.CommentModifyRequest;
 import com.team12.clients.comment.dto.CommentSendRequest;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
 import com.team12.clients.notification.dto.NotificationType;
+import com.team12.clients.qna.QnAClient;
 import com.team12.clients.qna.answer.dto.AnswerDto;
-import com.team12.clients.qna.AnswerClient;
 import com.team12.event.comment.entity.Comment;
 import com.team12.event.comment.repository.CommentRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +23,7 @@ import java.util.UUID;
 public class CommentService {
 
     private final NotificationClient notificationClient;
-    private final AnswerClient qnaClient;
+    private final QnAClient qnaClient;
     private final CommentRepository commentRepository;
 
     public void commentSend(CommentSendRequest request) {
@@ -56,7 +55,6 @@ public class CommentService {
                 .orElse(false);
     }
 
-
     public boolean commentDelete(UUID commentId) {
         return commentRepository.findById(commentId)
                 .map(comment -> {
@@ -66,4 +64,3 @@ public class CommentService {
                 .orElse(false);
     }
 }
-
