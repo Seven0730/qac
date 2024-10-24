@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import com.team12.clients.comment.dto.CommentModifyRequest;
 import com.team12.clients.comment.dto.CommentSendRequest;
 import com.team12.event.comment.controller.CommentController;
+import com.team12.event.comment.entity.CommentDto;
 import com.team12.event.comment.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,14 +31,16 @@ class CommentControllerTest {
     @Test
     void sendComment_successful() {
         UUID answerId = UUID.randomUUID();
-
         CommentSendRequest request = new CommentSendRequest("comment content", "ownerId", answerId);
-        doNothing().when(commentService).commentSend(request);
 
-        commentController.sendComment(request);
-
+        CommentDto expectedComment = new CommentDto();
+        when(commentService.commentSend(request)).thenReturn(expectedComment);
+        ResponseEntity<CommentDto> response = commentController.sendComment(request);
         verify(commentService, times(1)).commentSend(request);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedComment, response.getBody());
     }
+
 
     @Test
     void deleteComment_successful() {
