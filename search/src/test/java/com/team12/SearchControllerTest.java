@@ -1,6 +1,7 @@
 package com.team12;
 
 import com.team12.clients.qna.question.dto.QuestionDto;
+import com.team12.clients.user.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,8 +18,8 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SearchController.class)
 public class SearchControllerTest {
@@ -30,12 +31,20 @@ public class SearchControllerTest {
     private SearchService searchService;
 
     private List<QuestionDto> mockQuestions;
+    private List<UserDto> mockUsers;
 
     @BeforeEach
     public void setUp() {
+        // Mock questions data
         mockQuestions = Arrays.asList(
                 new QuestionDto(UUID.randomUUID(), "First Question", "This is the first question content", UUID.randomUUID()),
                 new QuestionDto(UUID.randomUUID(), "Second Question", "This is the second question content", UUID.randomUUID())
+        );
+
+        // Mock users data
+        mockUsers = Arrays.asList(
+                new UserDto(UUID.randomUUID(), "johndoe", "john@example.com"),
+                new UserDto(UUID.randomUUID(), "janedoe", "jane@example.com")
         );
     }
 
@@ -56,5 +65,24 @@ public class SearchControllerTest {
                 .andExpect(jsonPath("$[0].content").value("This is the first question content"))
                 .andExpect(jsonPath("$[1].title").value("Second Question"))
                 .andExpect(jsonPath("$[1].content").value("This is the second question content"));
+    }
+
+    @Test
+    public void testSearchUsers() throws Exception {
+        // Mock searchService to return mockUsers when searchUsersByUsername is called
+        Mockito.when(searchService.searchUsersByUsername(anyString())).thenReturn(mockUsers);
+
+        // Perform a GET request to /search/users with a keyword parameter
+        mockMvc.perform(get("/search/users")
+                        .param("keyword", "doe")
+                        .contentType(MediaType.APPLICATION_JSON))
+                // Expect HTTP 200 OK status
+                .andExpect(status().isOk())
+                // Verify that the response is JSON and contains the expected data
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].username").value("johndoe"))
+                .andExpect(jsonPath("$[0].email").value("john@example.com"))
+                .andExpect(jsonPath("$[1].username").value("janedoe"))
+                .andExpect(jsonPath("$[1].email").value("jane@example.com"));
     }
 }

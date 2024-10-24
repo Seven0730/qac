@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.team12.user.repository.UserRepository;
 
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -43,5 +44,8 @@ public class UserService {
 
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    public List<User> searchUsersByUsername(String username) {
+        return userRepository.findByUsernameContaining(username);
     }
 }
