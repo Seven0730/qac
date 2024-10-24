@@ -9,7 +9,9 @@ import com.team12.user.repository.UserRepository;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -44,6 +46,11 @@ public class UserService {
 
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public Map<UUID, String> getUserNamesByIds(List<UUID> userIds) {
+        List<User> users = userRepository.findAllById(userIds);
+        return users.stream().collect(Collectors.toMap(User::getId, User::getUsername));
     }
     public List<User> searchUsersByUsername(String username) {
         return userRepository.findByUsernameContaining(username);
