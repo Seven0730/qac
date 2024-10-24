@@ -1,9 +1,11 @@
 package com.team12.vote;
 
+import com.team12.clients.vote.dto.HasUserVotedRequest;
+import com.team12.clients.vote.dto.PostTypeOfClients;
+import com.team12.clients.vote.dto.VoteRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,13 +32,14 @@ class VoteControllerTest {
     void testClickUpvote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
-        PostType postType = PostType.QUESTION;
+        PostTypeOfClients postTypeOfClients = PostTypeOfClients.QUESTION;
+        VoteRequest voteRequest = new VoteRequest(userId, postId, null, null, postTypeOfClients);
 
-        doNothing().when(voteService).clickUpvote(userId, postId, postType);
+        doNothing().when(voteService).clickUpvote(voteRequest);
 
         mockMvc.perform(post("/api/v1/vote/upvote/{postId}", postId)
                         .param("userId", userId.toString())
-                        .param("postType", postType.toString())
+                        .param("postType", postTypeOfClients.toString())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())  // The expected HTTP status code is 200 OK
                 .andExpect(content().string("Vote successfully."));  // The content of the response expected to be returned
@@ -49,13 +52,14 @@ class VoteControllerTest {
     void testClickDownvote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
-        PostType postType = PostType.QUESTION;
+        PostTypeOfClients postTypeOfClients = PostTypeOfClients.QUESTION;
+        VoteRequest voteRequest = new VoteRequest(userId, postId, null, null, postTypeOfClients);
 
-        doNothing().when(voteService).clickDownvote(userId, postId, postType);
+        doNothing().when(voteService).clickDownvote(voteRequest);
 
         mockMvc.perform(post("/api/v1/vote/downvote/{postId}", postId)
                         .param("userId", userId.toString())
-                        .param("postType", postType.toString())
+                        .param("postType", postTypeOfClients.toString())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())  // The expected HTTP status code is 200 OK
                 .andExpect(content().string("Vote successfully."));  // The content of the response expected to be returned
@@ -102,9 +106,10 @@ class VoteControllerTest {
     public void testHasUserVoted_Upvote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
+        HasUserVotedRequest hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
 
         // Simulate that the user click upvote (1: upvote)
-        when(voteService.hasUserVoted(userId, postId)).thenReturn(1);
+        when(voteService.hasUserVoted(hasUserVotedRequest)).thenReturn(1);
 
         // Execute the request and verify the response
         mockMvc.perform(get("/api/v1/vote/has-voted/{postId}", postId)
@@ -117,9 +122,10 @@ class VoteControllerTest {
     public void testHasUserVoted_Downvote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
+        HasUserVotedRequest hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
 
         // Simulate that the user click downvote (-1: downvote)
-        when(voteService.hasUserVoted(userId, postId)).thenReturn(-1);
+        when(voteService.hasUserVoted(hasUserVotedRequest)).thenReturn(-1);
 
         // Execute the request and verify the response
         mockMvc.perform(get("/api/v1/vote/has-voted/{postId}", postId)
@@ -132,9 +138,10 @@ class VoteControllerTest {
     public void testHasUserVoted_NoVote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
+        HasUserVotedRequest hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
 
         // Simulate that the user do not click (0: no vote)
-        when(voteService.hasUserVoted(userId, postId)).thenReturn(0);
+        when(voteService.hasUserVoted(hasUserVotedRequest)).thenReturn(0);
 
         // Execute the request and verify the response
         mockMvc.perform(get("/api/v1/vote/has-voted/{postId}", postId)
