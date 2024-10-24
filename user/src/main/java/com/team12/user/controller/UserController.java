@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -36,6 +38,16 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/getUserName")
+    public ResponseEntity<Map<UUID, String>> getUsersByIds(@RequestBody List<UUID> userIds) {
+        log.info("Fetching users with ids: {}", userIds);
+
+        // Search All UserName By userIds(For Comment and Answer Page show Username)
+        Map<UUID, String> users = userService.getUserNamesByIds(userIds);
+
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping

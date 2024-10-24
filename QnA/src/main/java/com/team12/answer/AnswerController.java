@@ -47,6 +47,7 @@ public class AnswerController {
         return ResponseEntity.ok(updatedAnswer);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAnswer(@PathVariable UUID id) {
         answerService.deleteAnswer(id);
