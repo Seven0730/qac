@@ -1,39 +1,66 @@
 package com.team12.user.controller;
 
-import com.team12.clients.user.dto.UserLoginRequest;
+import com.team12.clients.user.dto.AuthRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
-import com.team12.user.service.AuthService;
+import com.team12.user.config.JwtUtil;
+import com.team12.user.entity.User;
+import com.team12.user.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-@Slf4j
+
 @RestController
 @RequestMapping("api/v1/user/auth")
-public class AuthController{
+@Slf4j
+@AllArgsConstructor
+public class AuthController {
 
-    private final AuthService authService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+
+        User user = userRepository.findByEmail(authRequest.email());
+
+        if (user == null || !passwordEncoder.matches(authRequest.password(), user.getPasswordHash())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+
+        String token = jwtUtil.createToken(user.getUsername());
+
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/register")
-    public void registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest) {
-        log.info("Registering user: {}", userRegistrationRequest);
-        authService.registerUser(userRegistrationRequest);
-    }
+    public ResponseEntity<?> register(@RequestBody UserRegistrationRequest registerRequest) {
 
-    @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserLoginRequest userLoginRequest) {
-        log.info("Logging in user: {}", userLoginRequest);
-        boolean isAuthenticated = authService.authenticateUser(userLoginRequest);
-        if (isAuthenticated) {
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+        if (userRepository.findByEmail(registerRequest.email()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
         }
+        String encodedPassword = passwordEncoder.encode(registerRequest.password());
+
+        User user = new User();
+        user.setUsername(registerRequest.username());
+        user.setEmail(registerRequest.email());
+        user.setPasswordHash(encodedPassword);
+
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
 
+    @PostMapping("/validate")
+    public boolean validateToken(@RequestHeader("Authorization") String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            String actualToken = token.substring(7);
+            return jwtUtil.validateToken(actualToken);
+        }
+        return false;
+    }
 }
