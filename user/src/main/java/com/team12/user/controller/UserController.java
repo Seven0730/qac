@@ -46,7 +46,6 @@ public class UserController {
     public ResponseEntity<Map<UUID, String>> getUsersByIds(@RequestBody List<UUID> userIds) {
         log.info("Fetching users with ids: {}", userIds);
 
-        // Search All UserName By userIds(For Comment and Answer Page show Username)
         Map<UUID, String> users = userService.getUserNamesByIds(userIds);
 
         return ResponseEntity.ok(users);
