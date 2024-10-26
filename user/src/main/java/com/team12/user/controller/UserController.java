@@ -1,5 +1,6 @@
 package com.team12.user.controller;
 
+import com.team12.clients.user.dto.UserDto;
 import com.team12.user.entity.User;
 import com.team12.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -76,5 +78,18 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @GetMapping("/search")
+    public List<UserDto> searchUsersByUsername(@RequestParam("keyword") String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Keyword cannot be null or empty");
+        }
+
+        List<User> users = userService.searchUsersByUsername(keyword);
+        return users.stream()
+                .map(user -> new UserDto(user.getId(), user.getUsername(), user.getEmail()))
+                .collect(Collectors.toList());
+
     }
 }
