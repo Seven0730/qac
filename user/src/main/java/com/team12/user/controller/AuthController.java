@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("api/v1/user/auth")
@@ -32,9 +34,16 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
-        String token = jwtUtil.createToken(user.getUsername());
+        String token = jwtUtil.createToken(user.getEmail());
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(
+                Map.of(
+                        "status", HttpStatus.OK.value(),
+                        "message", "Login successful",
+                        "token", token,
+                        "timestamp", System.currentTimeMillis()
+                )
+        );
     }
 
     @PostMapping("/register")

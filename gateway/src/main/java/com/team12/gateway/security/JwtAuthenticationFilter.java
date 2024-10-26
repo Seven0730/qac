@@ -2,6 +2,7 @@ package com.team12.gateway.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Configuration
+@Slf4j
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     private final String secretKey = "9eJ8grwCm6h2bXY7bCZzvQU9GRjVQWI9fXbXSY8/j8U=";
@@ -21,17 +23,23 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
+        String requestPath = request.getURI().getPath();
+        String clientIp = request.getRemoteAddress() != null ? request.getRemoteAddress().toString() : "unknown";
+        log.info("Incoming request: path = {}, client IP = {}", requestPath, clientIp);
+
         if (request.getURI().getPath().contains("/auth") || request.getURI().getPath().contains("/public")) {
             return chain.filter(exchange);
         }
 
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("Missing or invalid Authorization header for request: path = {}", requestPath);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
         String token = authHeader.substring(7);
+        log.info("Received token: {}", token);
 
         try {
             Claims claims = Jwts.parserBuilder()
@@ -49,6 +57,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        return -1; // 设置为较高的优先级
+        return -1;
     }
 }
