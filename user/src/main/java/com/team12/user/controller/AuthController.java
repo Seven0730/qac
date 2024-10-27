@@ -3,6 +3,7 @@ package com.team12.user.controller;
 import com.team12.clients.user.dto.AuthRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
 import com.team12.user.config.JwtUtil;
+import com.team12.user.entity.Role;
 import com.team12.user.entity.User;
 import com.team12.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -34,7 +35,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
 
-        String token = jwtUtil.createToken(String.valueOf(user.getId()));
+        String token = jwtUtil.createToken(String.valueOf(user.getId()), user.getRole());
 
         return ResponseEntity.ok(
                 Map.of(
@@ -58,6 +59,7 @@ public class AuthController {
         user.setUsername(registerRequest.username());
         user.setEmail(registerRequest.email());
         user.setPasswordHash(encodedPassword);
+        user.setRole(Role.USER);
 
         userRepository.save(user);
 
