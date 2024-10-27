@@ -16,12 +16,11 @@ public class QuestionService {
 
     // 添加新问题
     public Question addQuestion(QuestionCreateRequest request) {
-        UUID fixedOwnerId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
         return questionRepository.save(
                 Question.builder()
                         .title(request.title())
                         .content(request.content())
-                        .ownerId(fixedOwnerId)
+                        .ownerId(request.ownerId())
                         .createdAt(LocalDateTime.now())
                         .build()
         );

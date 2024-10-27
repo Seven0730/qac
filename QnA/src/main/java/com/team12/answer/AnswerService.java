@@ -1,5 +1,10 @@
 package com.team12.answer;
 
+import com.team12.clients.notification.NotificationClient;
+import com.team12.clients.notification.dto.NotificationRequest;
+import com.team12.clients.notification.dto.NotificationType;
+import com.team12.question.QuestionService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,13 +14,26 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class AnswerService {
 
     @Autowired
     private AnswerRepository answerRepository;
 
+    private final NotificationClient notificationClient;
+    private final QuestionService questionService;
+
     public Answer createAnswer(Answer answer) {
         answer.setCreatedAt(LocalDateTime.now());
+
+
+        //send notification to problem owner
+        notificationClient.sendNotification(new NotificationRequest(
+                questionService.getQuestionById(answer.getQuestionId()).getOwnerId(),
+                answer.getContent(),
+                NotificationType.ANSWER_POSTED
+        ));
+
         return answerRepository.save(answer);
     }
 
