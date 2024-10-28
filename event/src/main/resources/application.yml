@@ -2,8 +2,8 @@ server:
   port: 8086
 
 spring:
-  profiles:
-    active: cloud
+#  profiles:
+#    active: cloud
   application:
     name: event
   datasource:
