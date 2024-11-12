@@ -26,14 +26,19 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // TODO: FIX THIS
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody AuthRequest authRequest) {
 
         User user = userRepository.findByEmail(authRequest.email());
 
         if (user == null || !passwordEncoder.matches(authRequest.password(), user.getPasswordHash())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    Map.of(
+                            "status", HttpStatus.UNAUTHORIZED.value(),
+                            "message", "Invalid credentials",
+                            "timestamp", System.currentTimeMillis()
+                    )
+            );
         }
 
         String token = jwtUtil.createToken(String.valueOf(user.getId()), user.getRole());
@@ -48,9 +53,8 @@ public class AuthController {
         );
     }
 
-    // TODO: FIX THIS
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegistrationRequest registerRequest) {
+    public ResponseEntity<String> register(@RequestBody UserRegistrationRequest registerRequest) {
 
         if (userRepository.findByEmail(registerRequest.email()) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User already exists");
