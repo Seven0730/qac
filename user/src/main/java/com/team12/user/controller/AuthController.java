@@ -26,6 +26,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    // TODO: FIX THIS
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
 
@@ -47,6 +48,7 @@ public class AuthController {
         );
     }
 
+    // TODO: FIX THIS
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationRequest registerRequest) {
 

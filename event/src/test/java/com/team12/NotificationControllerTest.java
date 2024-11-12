@@ -60,10 +60,10 @@ class NotificationControllerTest {
 
     @Test
     void deleteNotification_successful() {
-        UUID UserId = UUID.randomUUID();
-        when(notificationService.notificationDelete(UserId, 1)).thenReturn(true);
+        UUID userId = UUID.randomUUID();
+        when(notificationService.notificationDelete(userId, 1)).thenReturn(true);
 
-        ResponseEntity<String> response = notificationController.deleteNotification(UserId, 1);
+        ResponseEntity<String> response = notificationController.deleteNotification(userId, 1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Deleted notification successfully.", response.getBody());
@@ -71,10 +71,10 @@ class NotificationControllerTest {
 
     @Test
     void deleteNotification_notFound() {
-        UUID UserId = UUID.randomUUID();
-        when(notificationService.notificationDelete(UserId, 1)).thenReturn(false);
+        UUID userId = UUID.randomUUID();
+        when(notificationService.notificationDelete(userId, 1)).thenReturn(false);
 
-        ResponseEntity<String> response = notificationController.deleteNotification(UserId, 1);
+        ResponseEntity<String> response = notificationController.deleteNotification(userId, 1);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Notification not found or empty", response.getBody());

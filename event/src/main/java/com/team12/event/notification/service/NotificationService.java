@@ -55,7 +55,7 @@ public class NotificationService {
 
         List<NotificationDTO> notificationDTOs = notifications.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
 
         return Optional.of(notificationDTOs);
     }
@@ -65,22 +65,26 @@ public class NotificationService {
         try {
             NotificationType notificationType;
 
-            if (type == 0) {
-                notificationType = NotificationType.ANSWER_POSTED;
-                notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
-            } else if (type == 1) {
-                notificationType = NotificationType.UPVOTE_RECEIVED;
-                notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
-                notificationType = NotificationType.DOWNVOTE_RECEIVED;
-                notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
-            } else if (type == 2) {
-                notificationType = NotificationType.COMMENT_POSTED;
-                notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
-            } else if (type == 4) {
-                notificationType = NotificationType.OTHER;
-                notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
-            } else {
-                throw new IllegalArgumentException("Unexpected type: " + type);
+            switch (type) {
+                case 0 -> {
+                    notificationType = NotificationType.ANSWER_POSTED;
+                    notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
+                }
+                case 1 -> {
+                    notificationType = NotificationType.UPVOTE_RECEIVED;
+                    notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
+                    notificationType = NotificationType.DOWNVOTE_RECEIVED;
+                    notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
+                }
+                case 2 -> {
+                    notificationType = NotificationType.COMMENT_POSTED;
+                    notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
+                }
+                case 4 -> {
+                    notificationType = NotificationType.OTHER;
+                    notificationRepository.deleteBytoUserIdAndNotificationType(id, notificationType);
+                }
+                default -> throw new IllegalArgumentException("Unexpected type: " + type);
             }
 
             log.info("Notification with userId: {} and type: {} has been deleted.", id, notificationType);

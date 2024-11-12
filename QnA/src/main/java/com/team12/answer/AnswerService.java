@@ -5,7 +5,6 @@ import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.dto.NotificationType;
 import com.team12.question.QuestionService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AnswerService {
 
-    @Autowired
     private AnswerRepository answerRepository;
 
     private final NotificationClient notificationClient;

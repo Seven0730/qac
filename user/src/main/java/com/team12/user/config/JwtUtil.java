@@ -21,6 +21,7 @@ public class JwtUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
 
+        // TODO: FIX
         try {
             return Jwts.builder()
                     .setClaims(claims)
@@ -35,6 +36,7 @@ public class JwtUtil {
         }
     }
 
+    // TODO: FIX
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);

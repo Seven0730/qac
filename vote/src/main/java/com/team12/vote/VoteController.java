@@ -21,7 +21,7 @@ public class VoteController {
     /*
         click upvote button
      */
-    @PostMapping("/upvote/{postId}")
+    @PostMapping("/upvote")
     public ResponseEntity<String> clickUpvote(@RequestBody VoteRequest voteRequest) {
         try {
             voteService.clickUpvote(voteRequest);
@@ -34,7 +34,7 @@ public class VoteController {
     /*
         click downvote button
      */
-    @PostMapping("/downvote/{postId}")
+    @PostMapping("/downvote")
     public ResponseEntity<String> clickDownvote(@RequestBody VoteRequest voteRequest) {
         try {
             voteService.clickDownvote(voteRequest);
@@ -68,7 +68,7 @@ public class VoteController {
         -1: downvote
         0: has not voted
     */
-    @GetMapping("/has-voted/{postId}")
+    @GetMapping("/has-voted")
     public ResponseEntity<Integer> hasUserVoted(@RequestBody HasUserVotedRequest hasUserVotedRequest) {
         int hasVoted = voteService.hasUserVoted(hasUserVotedRequest);
         return ResponseEntity.ok(hasVoted);
