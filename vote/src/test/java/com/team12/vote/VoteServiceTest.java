@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class VoteServiceTest {
+class VoteServiceTest {
 
     @Autowired
     private VoteService voteService;
@@ -47,7 +47,7 @@ public class VoteServiceTest {
 
     // Test 1: No vote at the beginning, the upvote succeeded
     @Test
-    public void testClickUpvote_NoExistingVote_AddUpvote() {
+    void testClickUpvote_NoExistingVote_AddUpvote() {
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.empty());
 
         voteService.clickUpvote(voteRequest);
@@ -58,7 +58,7 @@ public class VoteServiceTest {
 
     // Test 2: Click the up button at first, then unclick the up button
     @Test
-    public void testClickUpvote_ExistingUpvote_RemoveUpvote() {
+    void testClickUpvote_ExistingUpvote_RemoveUpvote() {
         Vote existingVote = Vote.builder()
                 .userId(userId)
                 .postId(postId)
@@ -76,7 +76,7 @@ public class VoteServiceTest {
 
     // Test 3: At first, click on the down, then convert to up
     @Test
-    public void testClickUpvote_ExistingDownvote_TurnToUpvote() {
+    void testClickUpvote_ExistingDownvote_TurnToUpvote() {
         Vote existingVote = Vote.builder()
                 .userId(userId)
                 .postId(postId)
@@ -103,7 +103,7 @@ public class VoteServiceTest {
     */
 
     @Test
-    public void testRemoveVote() {
+    void testRemoveVote() {
         voteService.removeVote(userId, postId);
 
         verify(voteRepository, times(1)).deleteByUserIdAndPostId(userId, postId);
@@ -114,7 +114,7 @@ public class VoteServiceTest {
     */
 
     @Test
-    public void testGetVoteCountWithVoteValue() {
+    void testGetVoteCountWithVoteValue() {
         // Simulate that the number of returned votes is 10
         when(voteRepository.countByPostIdAndVoteValue(postId, 1)).thenReturn(10);
 
@@ -131,7 +131,7 @@ public class VoteServiceTest {
 
     // User has voted
     @Test
-    public void testHasUserVoted_UserHasVoted() {
+    void testHasUserVoted_UserHasVoted() {
         Vote existingVote = Vote.builder()
                 .userId(userId)
                 .postId(postId)
@@ -149,7 +149,7 @@ public class VoteServiceTest {
 
     // User has not voted
     @Test
-    public void testHasUserVoted_UserHasNotVoted() {
+    void testHasUserVoted_UserHasNotVoted() {
         when(voteRepository.findByUserIdAndPostId(userId, postId)).thenReturn(Optional.empty());
 
         int voteValue = voteService.hasUserVoted(hasUserVotedRequest);

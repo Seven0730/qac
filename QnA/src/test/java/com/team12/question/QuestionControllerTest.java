@@ -1,7 +1,6 @@
 package com.team12.question;
 
 import com.team12.clients.qna.question.dto.QuestionCreateRequest;
-import com.team12.clients.qna.question.dto.QuestionUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class QuestionControllerTest {
+class QuestionControllerTest {
 
     @Mock
     private QuestionService questionService;
