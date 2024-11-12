@@ -5,11 +5,9 @@ import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.dto.NotificationType;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.VoteRequest;
-import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,14 +16,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Slf4j
 public class VoteService {
-
-    @Resource
-    private VoteService transactionVoteService;
-
     private final VoteRepository voteRepository;
     private final NotificationClient notificationClient;
 
-    @Transactional
     public void clickUpvote(VoteRequest voteRequest) {
         UUID userId = voteRequest.userId();
         UUID postId = voteRequest.postId();
@@ -43,7 +36,7 @@ public class VoteService {
             Vote vote = existingVote.get();
             if (vote.getVoteValue() == 1) {
                 // existingVote is up, cancel it
-                transactionVoteService.removeVote(userId, postId);
+                removeVote(userId, postId);
                 log.info("User {} remove upvote from post {}", userId, postId);
             } else {
                 // existingVote is down, turn down into up
@@ -56,7 +49,6 @@ public class VoteService {
         }
     }
 
-    @Transactional
     public void clickDownvote(VoteRequest voteRequest) {
         UUID userId = voteRequest.userId();
         UUID postId = voteRequest.postId();
@@ -72,7 +64,7 @@ public class VoteService {
             Vote vote = existingVote.get();
             if (vote.getVoteValue() == -1) {
                 // existingVote is down, cancel it
-                transactionVoteService.removeVote(userId, postId);
+                removeVote(userId, postId);
                 log.info("User {} remove downvote from post {}", userId, postId);
             } else {
                 // existingVote is up, turn down into down
@@ -83,7 +75,6 @@ public class VoteService {
         }
     }
 
-    @Transactional
     public void removeVote(UUID userId, UUID postId) {
         voteRepository.deleteByUserIdAndPostId(userId, postId);
     }
