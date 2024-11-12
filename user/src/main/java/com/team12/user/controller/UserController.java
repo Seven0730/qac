@@ -92,4 +92,16 @@ public class UserController {
                 .toList();
 
     }
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<UserDto> getUserProfileById(@PathVariable UUID id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+
+        UserDto userDto = new UserDto(user.getId(), user.getUsername(), user.getEmail());
+        return ResponseEntity.ok(userDto);
+    }
+
 }

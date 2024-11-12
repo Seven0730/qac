@@ -1,9 +1,6 @@
 // AnswerControllerTest.java
-package com.team12.question;
+package com.team12.answer;
 
-import com.team12.answer.Answer;
-import com.team12.answer.AnswerController;
-import com.team12.answer.AnswerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
