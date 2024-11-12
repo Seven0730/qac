@@ -3,6 +3,7 @@ package com.team12.gateway.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
-    private final String secretKey = "9eJ8grwCm6h2bXY7bCZzvQU9GRjVQWI9fXbXSY8/j8U=";
+    @Value("${jwt.secretKey}")
+    private String secretKey;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -32,21 +34,20 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         }
 
         //handel websocket request
-        // TODO: FIX
-        if (requestPath.contains("/ws")) {
-            String token = request.getQueryParams().getFirst("token");
-            try {
-                Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(secretKey)
-                        .build()
-                        .parseClaimsJws(token)
-                        .getBody();
-            } catch (Exception e) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
-            }
-            return chain.filter(exchange);
-        }
+//        if (requestPath.contains("/ws")) {
+//            String token = request.getQueryParams().getFirst("token");
+//            try {
+//                Claims claims = Jwts.parserBuilder()
+//                        .setSigningKey(secretKey)
+//                        .build()
+//                        .parseClaimsJws(token)
+//                        .getBody();
+//            } catch (Exception e) {
+//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//                return exchange.getResponse().setComplete();
+//            }
+//            return chain.filter(exchange);
+//        }
 
 
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
@@ -59,17 +60,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         String token = authHeader.substring(7);
         log.info("Received token: {}", token);
 
-        // TODO: FIX
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
-        }
         return chain.filter(exchange);
 
     }
