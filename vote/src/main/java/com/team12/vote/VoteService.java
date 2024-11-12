@@ -104,14 +104,6 @@ public class VoteService {
 
         Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(userId, postId);
         return existingVote.map(Vote::getVoteValue).orElse(0);
-        /*
-        equal to codes as follows:
-        if (existingVote.isEmpty()) {
-            return 0;
-        } else {
-            return existingVote.get().getVoteValue();
-        }
-        */
     }
 
     /*

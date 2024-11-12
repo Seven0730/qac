@@ -54,7 +54,7 @@ class SearchControllerTest {
         Mockito.when(searchService.searchQuestionsByKeyword(anyString())).thenReturn(mockQuestions);
 
         // Perform a GET request to /search/questions with a keyword parameter
-        mockMvc.perform(get("/search/questions")
+        mockMvc.perform(get("/api/v1/search/questions")
                         .param("keyword", "question")
                         .contentType(MediaType.APPLICATION_JSON))
                 // Expect HTTP 200 OK status
@@ -73,7 +73,7 @@ class SearchControllerTest {
         Mockito.when(searchService.searchUsersByUsername(anyString())).thenReturn(mockUsers);
 
         // Perform a GET request to /search/users with a keyword parameter
-        mockMvc.perform(get("/search/users")
+        mockMvc.perform(get("/api/v1/search/users")
                         .param("keyword", "doe")
                         .contentType(MediaType.APPLICATION_JSON))
                 // Expect HTTP 200 OK status
