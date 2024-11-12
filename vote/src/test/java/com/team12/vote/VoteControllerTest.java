@@ -30,7 +30,7 @@ class VoteControllerTest {
     private VoteService voteService;
 
     /*
-        test for clickUpvote()
+        Test for clickUpvote()
     */
     @Test
     void testClickUpvote() throws Exception {
@@ -49,7 +49,7 @@ class VoteControllerTest {
     }
 
     /*
-        test for clickDownvote()
+        Test for clickDownvote()
     */
     @Test
     void testClickDownvote() throws Exception {
@@ -68,7 +68,7 @@ class VoteControllerTest {
     }
 
     /*
-        test for getUpvoteCount()
+        Test for getUpvoteCount()
     */
     @Test
     void testGetUpvoteCount() throws Exception {
@@ -85,7 +85,7 @@ class VoteControllerTest {
     }
 
     /*
-        test for getDownvoteCount()
+        Test for getDownvoteCount()
     */
     @Test
     void testGetDownvoteCount() throws Exception {
@@ -102,7 +102,7 @@ class VoteControllerTest {
     }
 
     /*
-        test for hasUserVoted()
+        Test for hasUserVoted()
     */
     @Test
     void testHasUserVoted_Upvote() throws Exception {

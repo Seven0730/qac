@@ -98,7 +98,7 @@ public class VoteService {
     }
 
     /*
-        ------------------------------------- private methods -------------------------------------
+        ------------------------------------- Private methods -------------------------------------
     */
 
     private Vote createVote(UUID userId, UUID postId, PostType postType, int voteValue) {

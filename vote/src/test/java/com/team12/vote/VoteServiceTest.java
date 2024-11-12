@@ -49,7 +49,7 @@ class VoteServiceTest {
     }
 
     /*
-        test for clickUpvote()
+        Test for clickUpvote()
     */
 
     // Test 1: No vote at the beginning, the upvote succeeded
@@ -100,13 +100,13 @@ class VoteServiceTest {
     }
 
     /*
-        test for clickDownvote()
+        Test for clickDownvote()
     */
 
 
 
     /*
-        test for removeVote()
+        Test for removeVote()
     */
 
     @Test
@@ -117,7 +117,7 @@ class VoteServiceTest {
     }
 
     /*
-        test for getVoteCountWithVoteValue()
+        Test for getVoteCountWithVoteValue()
     */
 
     @Test
@@ -133,7 +133,7 @@ class VoteServiceTest {
     }
 
     /*
-        test for hasUserVoted()
+        Test for hasUserVoted()
     */
 
     // User has voted
