@@ -1,5 +1,6 @@
 package com.team12.vote;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.PostTypeOfClients;
 import com.team12.clients.vote.dto.VoteRequest;
@@ -22,11 +23,14 @@ class VoteControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private VoteService voteService;
 
     /*
-        test for clickUpvote()
+        Test for clickUpvote()
     */
     @Test
     void testClickUpvote() throws Exception {
@@ -37,16 +41,15 @@ class VoteControllerTest {
 
         doNothing().when(voteService).clickUpvote(voteRequest);
 
-        mockMvc.perform(post("/api/v1/vote/upvote/{postId}", postId)
-                        .param("userId", userId.toString())
-                        .param("postType", postTypeOfClients.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/v1/vote/upvote")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(voteRequest)))
                 .andExpect(status().isOk())  // The expected HTTP status code is 200 OK
                 .andExpect(content().string("Vote successfully."));  // The content of the response expected to be returned
     }
 
     /*
-        test for clickDownvote()
+        Test for clickDownvote()
     */
     @Test
     void testClickDownvote() throws Exception {
@@ -57,16 +60,15 @@ class VoteControllerTest {
 
         doNothing().when(voteService).clickDownvote(voteRequest);
 
-        mockMvc.perform(post("/api/v1/vote/downvote/{postId}", postId)
-                        .param("userId", userId.toString())
-                        .param("postType", postTypeOfClients.toString())
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/v1/vote/downvote")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(voteRequest)))
                 .andExpect(status().isOk())  // The expected HTTP status code is 200 OK
                 .andExpect(content().string("Vote successfully."));  // The content of the response expected to be returned
     }
 
     /*
-        test for getUpvoteCount()
+        Test for getUpvoteCount()
     */
     @Test
     void testGetUpvoteCount() throws Exception {
@@ -83,7 +85,7 @@ class VoteControllerTest {
     }
 
     /*
-        test for getDownvoteCount()
+        Test for getDownvoteCount()
     */
     @Test
     void testGetDownvoteCount() throws Exception {
@@ -100,7 +102,7 @@ class VoteControllerTest {
     }
 
     /*
-        test for hasUserVoted()
+        Test for hasUserVoted()
     */
     @Test
     void testHasUserVoted_Upvote() throws Exception {
@@ -112,8 +114,9 @@ class VoteControllerTest {
         when(voteService.hasUserVoted(hasUserVotedRequest)).thenReturn(1);
 
         // Execute the request and verify the response
-        mockMvc.perform(get("/api/v1/vote/has-voted/{postId}", postId)
-                        .param("userId", userId.toString()))
+        mockMvc.perform(get("/api/v1/vote/has-voted")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(hasUserVotedRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));  // Verify that the return value is 1
     }
@@ -128,8 +131,9 @@ class VoteControllerTest {
         when(voteService.hasUserVoted(hasUserVotedRequest)).thenReturn(-1);
 
         // Execute the request and verify the response
-        mockMvc.perform(get("/api/v1/vote/has-voted/{postId}", postId)
-                        .param("userId", userId.toString()))
+        mockMvc.perform(get("/api/v1/vote/has-voted")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(hasUserVotedRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("-1"));  // Verify that the return value is -1
     }
@@ -144,8 +148,9 @@ class VoteControllerTest {
         when(voteService.hasUserVoted(hasUserVotedRequest)).thenReturn(0);
 
         // Execute the request and verify the response
-        mockMvc.perform(get("/api/v1/vote/has-voted/{postId}", postId)
-                        .param("userId", userId.toString()))
+        mockMvc.perform(get("/api/v1/vote/has-voted")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(hasUserVotedRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("0"));  // Verify that the return value is 0
     }

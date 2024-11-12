@@ -19,7 +19,7 @@ public class VoteController {
     }
 
     /*
-        click upvote button
+        Click upvote button
      */
     @PostMapping("/upvote")
     public ResponseEntity<String> clickUpvote(@RequestBody VoteRequest voteRequest) {
@@ -32,7 +32,7 @@ public class VoteController {
     }
 
     /*
-        click downvote button
+        Click downvote button
      */
     @PostMapping("/downvote")
     public ResponseEntity<String> clickDownvote(@RequestBody VoteRequest voteRequest) {
@@ -45,7 +45,7 @@ public class VoteController {
     }
 
     /*
-        get the count of upvote of the post
+        Get the count of upvote of the post
      */
     @GetMapping("/upvote/{postId}/count")
     public ResponseEntity<Integer> getUpvoteCount(@PathVariable UUID postId) {
@@ -54,7 +54,7 @@ public class VoteController {
     }
 
     /*
-        get the count of downvote of the post
+        Get the count of downvote of the post
      */
     @GetMapping("/downvote/{postId}/count")
     public ResponseEntity<Integer> getDownvoteCount(@PathVariable UUID postId) {
@@ -63,7 +63,7 @@ public class VoteController {
     }
 
     /*
-        check if user has voted for the post
+        Check if user has voted for the post
         1: upvote
         -1: downvote
         0: has not voted

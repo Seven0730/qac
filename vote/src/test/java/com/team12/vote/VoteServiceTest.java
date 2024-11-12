@@ -1,5 +1,7 @@
 package com.team12.vote;
 
+import com.team12.clients.notification.NotificationClient;
+import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.PostTypeOfClients;
 import com.team12.clients.vote.dto.VoteRequest;
@@ -25,6 +27,10 @@ class VoteServiceTest {
     @MockBean
     private VoteRepository voteRepository;
 
+    @MockBean
+    private NotificationClient notificationClient;
+
+
     private UUID userId;
     private UUID postId;
     private PostTypeOfClients postTypeOfClients;
@@ -39,10 +45,11 @@ class VoteServiceTest {
         postTypeOfClients = PostTypeOfClients.QUESTION; // question / answer
         voteRequest = new VoteRequest(userId, postId, null, null, postTypeOfClients);
         hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
+        doNothing().when(notificationClient).sendNotification(any(NotificationRequest.class));
     }
 
     /*
-        test for clickUpvote()
+        Test for clickUpvote()
     */
 
     // Test 1: No vote at the beginning, the upvote succeeded
@@ -93,13 +100,13 @@ class VoteServiceTest {
     }
 
     /*
-        test for clickDownvote()
+        Test for clickDownvote()
     */
 
 
 
     /*
-        test for removeVote()
+        Test for removeVote()
     */
 
     @Test
@@ -110,7 +117,7 @@ class VoteServiceTest {
     }
 
     /*
-        test for getVoteCountWithVoteValue()
+        Test for getVoteCountWithVoteValue()
     */
 
     @Test
@@ -126,7 +133,7 @@ class VoteServiceTest {
     }
 
     /*
-        test for hasUserVoted()
+        Test for hasUserVoted()
     */
 
     // User has voted
