@@ -32,6 +32,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         }
 
         //handel websocket request
+        // TODO: FIX
         if (requestPath.contains("/ws")) {
             String token = request.getQueryParams().getFirst("token");
             try {
@@ -58,6 +59,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         String token = authHeader.substring(7);
         log.info("Received token: {}", token);
 
+        // TODO: FIX
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(secretKey)

@@ -89,7 +89,7 @@ public class UserController {
         List<User> users = userService.searchUsersByUsername(keyword);
         return users.stream()
                 .map(user -> new UserDto(user.getId(), user.getUsername(), user.getEmail()))
-                .collect(Collectors.toList());
+                .toList();
 
     }
 }

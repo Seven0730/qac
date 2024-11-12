@@ -69,7 +69,7 @@ class VoteControllerTest {
         test for getUpvoteCount()
     */
     @Test
-    public void testGetUpvoteCount() throws Exception {
+    void testGetUpvoteCount() throws Exception {
         UUID postId = UUID.randomUUID();
 
         // The simulated service layer returns the number of upvote
@@ -86,7 +86,7 @@ class VoteControllerTest {
         test for getDownvoteCount()
     */
     @Test
-    public void testGetDownvoteCount() throws Exception {
+    void testGetDownvoteCount() throws Exception {
         UUID postId = UUID.randomUUID();
 
         // The simulated service layer returns the number of upvote
@@ -103,7 +103,7 @@ class VoteControllerTest {
         test for hasUserVoted()
     */
     @Test
-    public void testHasUserVoted_Upvote() throws Exception {
+    void testHasUserVoted_Upvote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         HasUserVotedRequest hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
@@ -119,7 +119,7 @@ class VoteControllerTest {
     }
 
     @Test
-    public void testHasUserVoted_Downvote() throws Exception {
+    void testHasUserVoted_Downvote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         HasUserVotedRequest hasUserVotedRequest = new HasUserVotedRequest(userId, postId);
@@ -135,7 +135,7 @@ class VoteControllerTest {
     }
 
     @Test
-    public void testHasUserVoted_NoVote() throws Exception {
+    void testHasUserVoted_NoVote() throws Exception {
         UUID userId = UUID.randomUUID();
         UUID postId = UUID.randomUUID();
         HasUserVotedRequest hasUserVotedRequest = new HasUserVotedRequest(userId, postId);

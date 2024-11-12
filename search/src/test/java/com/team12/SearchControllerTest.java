@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SearchController.class)
-public class SearchControllerTest {
+class SearchControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +49,7 @@ public class SearchControllerTest {
     }
 
     @Test
-    public void testSearchQuestions() throws Exception {
+    void testSearchQuestions() throws Exception {
         // Mock searchService to return mockQuestions when searchQuestionsByKeyword is called
         Mockito.when(searchService.searchQuestionsByKeyword(anyString())).thenReturn(mockQuestions);
 
@@ -68,7 +68,7 @@ public class SearchControllerTest {
     }
 
     @Test
-    public void testSearchUsers() throws Exception {
+    void testSearchUsers() throws Exception {
         // Mock searchService to return mockUsers when searchUsersByUsername is called
         Mockito.when(searchService.searchUsersByUsername(anyString())).thenReturn(mockUsers);
 

@@ -1,6 +1,5 @@
 package com.team12.answer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +11,11 @@ import java.util.UUID;
 @RequestMapping("api/v1/QnA/answers")
 public class AnswerController {
 
-    @Autowired
-    private AnswerService answerService;
+    private final AnswerService answerService;
+
+    public AnswerController(AnswerService answerService) {
+        this.answerService = answerService;
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Answer> createAnswer(@RequestBody Answer answer) {
