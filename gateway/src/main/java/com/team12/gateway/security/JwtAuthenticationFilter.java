@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         String requestPath = request.getURI().getPath();
 
-        // Skip /auth and /public paths
         if (request.getURI().getPath().contains("/auth") || request.getURI().getPath().contains("/public")) {
             return chain.filter(exchange);
         }
