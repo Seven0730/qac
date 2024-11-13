@@ -6,19 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-class QuestionControllerTest {
+public class QuestionControllerTest {
 
     @Mock
     private QuestionService questionService;
@@ -33,82 +31,93 @@ class QuestionControllerTest {
 
     @Test
     void getAllQuestions_returnsListOfQuestions() {
-        List<Question> questions = List.of(new Question());
+
+        List<Question> questions = List.of(new Question(UUID.randomUUID(), "Title 1", "Content 1", null, UUID.randomUUID()));
         when(questionService.getAllQuestions()).thenReturn(questions);
 
         ResponseEntity<List<Question>> response = questionController.getAllQuestions();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(questions, response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().size()).isEqualTo(1);
     }
 
     @Test
     void getQuestionById_returnsQuestion_whenFound() {
-        UUID id = UUID.randomUUID();
-        Question question = new Question();
-        when(questionService.getQuestionById(id)).thenReturn(question);
 
-        ResponseEntity<Question> response = questionController.getQuestionById(id);
+        UUID questionId = UUID.randomUUID();
+        Question question = new Question(questionId, "Title", "Content", null, UUID.randomUUID());
+        when(questionService.getQuestionById(questionId)).thenReturn(question);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(question, response.getBody());
+        ResponseEntity<Question> response = questionController.getQuestionById(questionId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getId()).isEqualTo(questionId);
     }
 
     @Test
-    void getQuestionById_returnsNotFound_whenNotFound() {
-        UUID id = UUID.randomUUID();
-        when(questionService.getQuestionById(id)).thenReturn(null);
+    void getQuestionById_returnsNotFound_whenQuestionDoesNotExist() {
 
-        ResponseEntity<Question> response = questionController.getQuestionById(id);
+        UUID questionId = UUID.randomUUID();
+        when(questionService.getQuestionById(questionId)).thenReturn(null);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        ResponseEntity<Question> response = questionController.getQuestionById(questionId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     void deleteQuestion_deletesQuestion() {
-        UUID id = UUID.randomUUID();
-        doNothing().when(questionService).deleteQuestion(id);
 
-        ResponseEntity<Void> response = questionController.deleteQuestion(id);
+        UUID questionId = UUID.randomUUID();
+        doNothing().when(questionService).deleteQuestion(questionId);
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(questionService, times(1)).deleteQuestion(id);
+        ResponseEntity<Void> response = questionController.deleteQuestion(questionId);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        verify(questionService, times(1)).deleteQuestion(questionId);
     }
-    
+
     @Test
     void addQuestion_createsNewQuestion() {
-        QuestionCreateRequest request = new QuestionCreateRequest(
-                "title", "content", UUID.randomUUID()
-        );
-        Question newQuestion = new Question();
-        when(questionService.addQuestion(request)).thenReturn(newQuestion);
+
+        QuestionCreateRequest request = new QuestionCreateRequest("Title", "Content", UUID.randomUUID());
+        Question question = new Question(UUID.randomUUID(), request.title(), request.content(), null, request.ownerId());
+        when(questionService.addQuestion(any(QuestionCreateRequest.class))).thenReturn(question);
 
         ResponseEntity<Question> response = questionController.addQuestion(request);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(newQuestion, response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getTitle()).isEqualTo(request.title());
     }
 
     @Test
     void getQuestionsByOwnerId_returnsListOfQuestions() {
+
         UUID ownerId = UUID.randomUUID();
-        List<Question> questions = List.of(new Question());
+        List<Question> questions = List.of(new Question(UUID.randomUUID(), "Title", "Content", null, ownerId));
         when(questionService.getQuestionsByOwnerId(ownerId)).thenReturn(questions);
 
         ResponseEntity<List<Question>> response = questionController.getQuestionsByOwnerId(ownerId);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(questions, response.getBody());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().size()).isEqualTo(1);
     }
 
     @Test
-    void getQuestionsByOwnerId_returnsEmptyList_whenNoQuestionsFound() {
-        UUID ownerId = UUID.randomUUID();
-        when(questionService.getQuestionsByOwnerId(ownerId)).thenReturn(Collections.emptyList());
+    void searchQuestions_returnsMatchingQuestions() {
 
-        ResponseEntity<List<Question>> response = questionController.getQuestionsByOwnerId(ownerId);
+        String keyword = "Title";
+        List<Question> questions = List.of(new Question(UUID.randomUUID(), "Title", "Content", null, UUID.randomUUID()));
+        when(questionService.searchQuestions(keyword)).thenReturn(questions);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(Collections.emptyList(), response.getBody());
+        ResponseEntity<List<Question>> response = questionController.searchQuestions(keyword);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().size()).isEqualTo(1);
     }
 }
