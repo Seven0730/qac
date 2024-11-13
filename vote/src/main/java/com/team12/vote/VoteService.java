@@ -79,6 +79,8 @@ public class VoteService {
         voteRepository.deleteByUserIdAndPostId(userId, postId);
     }
 
+    public void removeVote(UUID postId) {voteRepository.deleteByPostId(postId);}
+
     public int[] getVoteCount(UUID postId) {
         int up = getVoteCountWithVoteValue(postId, 1);
         int down = getVoteCountWithVoteValue(postId, -1);

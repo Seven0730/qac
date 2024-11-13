@@ -73,4 +73,17 @@ public class VoteController {
         int hasVoted = voteService.hasUserVoted(hasUserVotedRequest);
         return ResponseEntity.ok(hasVoted);
     }
+
+    /*
+        Delete all the votes of the postId
+     */
+    @DeleteMapping("/delete-vote/{postId}")
+    public ResponseEntity<String> deleteVote(@PathVariable UUID postId) {
+        try {
+            voteService.removeVote(postId);
+            return ResponseEntity.ok("Delete vote successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
