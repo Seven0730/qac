@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    consul:
+      host: consul
+      port: 8500
+  datasource:
+    url: jdbc:mysql://qacmysql.cjuukq6e630o.ap-southeast-1.rds.amazonaws.com:3306/event
+    username: root
+    password: L8$gHn9%VzBx4Q!
+  rabbitmq:
+    host: ec2-13-236-119-150.ap-southeast-2.compute.amazonaws.com
+    port: 5672
+    username: admin
+    password: bInvd0fLiuQwoDj

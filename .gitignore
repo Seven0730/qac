@@ -8,6 +8,8 @@ logs/
 # Target directory
 target/
 
+QnA/src/main/resources
+gateway/src/main/resources
 # Maven specific files
 pom.xml.tag
 pom.xml.releaseBackup

@@ -5,6 +5,6 @@ import java.util.UUID;
 public record NotificationRequest(
         UUID toUserId,
         String message,
-        String toUserEmail
+        NotificationType type
 ){
 }

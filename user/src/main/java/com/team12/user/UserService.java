@@ -3,6 +3,7 @@ package com.team12.user;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.NotificationClient;
 
+import com.team12.clients.notification.dto.NotificationType;
 import com.team12.clients.user.dto.UserLoginRequest;
 import com.team12.clients.user.dto.UserRegistrationRequest;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class  UserService {
         notificationClient.sendNotification(new NotificationRequest(
                 user.getId(),
                 "User registered",
-                request.email()
+                NotificationType.OTHER
         ));
     }
 
