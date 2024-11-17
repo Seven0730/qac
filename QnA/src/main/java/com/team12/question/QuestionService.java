@@ -1,7 +1,10 @@
 package com.team12.question;
 
 import com.team12.clients.qna.question.dto.QuestionCreateRequest;
-import lombok.AllArgsConstructor;
+import com.team12.question.review.ContentReviewChain;
+import com.team12.question.review.LengthChecker;
+import com.team12.question.review.ProfanityFilter;
+import com.team12.question.review.SpamChecker;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -9,50 +12,63 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
 public class QuestionService {
 
+    private final ContentReviewChain contentReviewChain;
     private final QuestionRepository questionRepository;
 
-    // 添加新问题
-    public Question addQuestion(QuestionCreateRequest request) {
-        return questionRepository.save(
-                Question.builder()
-                        .title(request.title())
-                        .content(request.content())
-                        .ownerId(request.ownerId())
-                        .createdAt(LocalDateTime.now())
-                        .build()
-        );
+    public QuestionService(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+        // Set content review chain
+        this.contentReviewChain = new ContentReviewChain();
+        contentReviewChain.addHandler(new ProfanityFilter());
+        contentReviewChain.addHandler(new LengthChecker());
+        contentReviewChain.addHandler(new SpamChecker());
     }
 
-    // 根据 ID 获取问题
+    // Add new Question
+    public Question addQuestion(QuestionCreateRequest request) {
+        if (contentReviewChain.review(request.content())) {
+            return questionRepository.save(
+                    Question.builder()
+                            .title(request.title())
+                            .content(request.content())
+                            .ownerId(request.ownerId())
+                            .createdAt(LocalDateTime.now())
+                            .build()
+            );
+        }
+        else {
+            return new Question();
+        }
+    }
+
+    // Find Question by ID
     public Question getQuestionById(UUID id) {
         return questionRepository.findById(id).orElse(null);
     }
 
-    // 删除问题
+    // Delete Question
     public void deleteQuestion(UUID id) {
         questionRepository.deleteById(id);
     }
 
-    // 更新问题
+    // Update Question
     public Question updateQuestion(Question question) {
-        // 直接更新传入的 Question 对象
         return questionRepository.save(question);
     }
 
-    // 根据关键字搜索问题
+    // Find Question by keyword
     public List<Question> searchQuestions(String keyword) {
         return questionRepository.searchByKeyword(keyword);
     }
 
-    // 获取所有问题
+    // Get all Questions
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
 
-    // 根据 Owner ID 获取问题
+    // Find Questions by Owner ID
     public List<Question> getQuestionsByOwnerId(UUID ownerId) {
         return questionRepository.findByOwnerId(ownerId);
     }
