@@ -2,6 +2,7 @@ package com.team12.vote;
 
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.VoteRequest;
+import com.team12.vote.voteservice.VoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
