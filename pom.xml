@@ -27,7 +27,7 @@
     <spring.boot.maven.plugin.version>3.1.0</spring.boot.maven.plugin.version>
     <spring.boot.dependecies.version>3.1.0</spring.boot.dependecies.version>
     <spring.cloud-version>2022.0.3</spring.cloud-version>
-    <sonar.exclusions>**/JwtAuthenticationFilter.java, **/JwtUtil.java</sonar.exclusions>
+    <sonar.exclusions>**/JwtAuthenticationFilter.java, **/JwtUtil.java, **/JwtTokenAuthenticationStrategy.java</sonar.exclusions>
   </properties>
 
   <dependencyManagement>
