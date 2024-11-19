@@ -5,6 +5,7 @@ import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.PostTypeOfClients;
 import com.team12.clients.vote.dto.VoteRequest;
+import com.team12.vote.voteservice.VoteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
