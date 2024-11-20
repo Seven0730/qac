@@ -1,10 +1,13 @@
-package com.team12.vote;
+package com.team12.vote.voteservice;
 
 import com.team12.clients.notification.NotificationClient;
 import com.team12.clients.notification.dto.NotificationRequest;
 import com.team12.clients.notification.dto.NotificationType;
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.VoteRequest;
+import com.team12.vote.PostType;
+import com.team12.vote.Vote;
+import com.team12.vote.VoteRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,65 +22,32 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final NotificationClient notificationClient;
 
+    public void handleVote(VoteRequest voteRequest, String voteType) {
+        VoteStrategy strategy = getVoteStrategy(voteType);
+        strategy.handleVote(voteRequest);
+    }
+
+    private VoteStrategy getVoteStrategy(String voteType) {
+        return switch (voteType.toLowerCase()) {
+            case "upvote" -> new UpvoteStrategy(voteRepository, notificationClient);
+            case "downvote" -> new DownvoteStrategy(voteRepository);
+            default -> throw new IllegalArgumentException("Invalid vote type: " + voteType);
+        };
+    }
+
     public void clickUpvote(VoteRequest voteRequest) {
-        UUID userId = voteRequest.userId();
-        UUID postId = voteRequest.postId();
-        PostType postType = PostType.valueOf(voteRequest.postType().name());
-
-        Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(userId, postId);
-        if (existingVote.isEmpty()) {
-            // user has not voted, add upvote
-            createVote(userId, postId, postType, 1); // 1 for upvote
-            log.info("User {} upvote post {}", userId, postId);
-
-            sendNotification(voteRequest);
-        } else {
-            // user has voted, check if it is up or down
-            Vote vote = existingVote.get();
-            if (vote.getVoteValue() == 1) {
-                // existingVote is up, cancel it
-                removeVote(userId, postId);
-                log.info("User {} remove upvote from post {}", userId, postId);
-            } else {
-                // existingVote is down, turn down into up
-                vote.setVoteValue(1);
-                voteRepository.save(vote);
-                log.info("User {} turn downvote into upvote from post {}", userId, postId);
-
-                sendNotification(voteRequest);
-            }
-        }
+        handleVote(voteRequest, "upvote");
     }
 
     public void clickDownvote(VoteRequest voteRequest) {
-        UUID userId = voteRequest.userId();
-        UUID postId = voteRequest.postId();
-        PostType postType = PostType.valueOf(voteRequest.postType().name());
-
-        Optional<Vote> existingVote = voteRepository.findByUserIdAndPostId(userId, postId);
-        if (existingVote.isEmpty()) {
-            // user has not voted, add downvote
-            createVote(userId, postId, postType, -1); // -1 for downvote
-            log.info("User {} downvote post {}", userId, postId);
-        } else {
-            // user has voted, check if it is up or down
-            Vote vote = existingVote.get();
-            if (vote.getVoteValue() == -1) {
-                // existingVote is down, cancel it
-                removeVote(userId, postId);
-                log.info("User {} remove downvote from post {}", userId, postId);
-            } else {
-                // existingVote is up, turn down into down
-                vote.setVoteValue(-1);
-                voteRepository.save(vote);
-                log.info("User {} turn upvote into downvote from post {}", userId, postId);
-            }
-        }
+        handleVote(voteRequest, "downvote");
     }
 
     public void removeVote(UUID userId, UUID postId) {
         voteRepository.deleteByUserIdAndPostId(userId, postId);
     }
+
+    public void removeVote(UUID postId) {voteRepository.deleteByPostId(postId);}
 
     public int[] getVoteCount(UUID postId) {
         int up = getVoteCountWithVoteValue(postId, 1);

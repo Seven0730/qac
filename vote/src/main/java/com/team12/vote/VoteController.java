@@ -2,6 +2,7 @@ package com.team12.vote;
 
 import com.team12.clients.vote.dto.HasUserVotedRequest;
 import com.team12.clients.vote.dto.VoteRequest;
+import com.team12.vote.voteservice.VoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,5 +73,18 @@ public class VoteController {
     public ResponseEntity<Integer> hasUserVoted(@RequestBody HasUserVotedRequest hasUserVotedRequest) {
         int hasVoted = voteService.hasUserVoted(hasUserVotedRequest);
         return ResponseEntity.ok(hasVoted);
+    }
+
+    /*
+        Delete all the votes of the postId
+     */
+    @DeleteMapping("/delete-vote/{postId}")
+    public ResponseEntity<String> deleteVote(@PathVariable UUID postId) {
+        try {
+            voteService.removeVote(postId);
+            return ResponseEntity.ok("Delete vote successfully.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

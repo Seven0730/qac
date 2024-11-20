@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class QuestionControllerTest {
+class QuestionControllerTest {
 
     @Mock
     private QuestionService questionService;
@@ -39,7 +39,7 @@ public class QuestionControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().size()).isEqualTo(1);
+        assertThat(response.getBody()).hasSize(1);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class QuestionControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().size()).isEqualTo(1);
+        assertThat(response.getBody()).hasSize(1);
     }
 
     @Test
@@ -118,6 +118,6 @@ public class QuestionControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().size()).isEqualTo(1);
+        assertThat(response.getBody()).hasSize(1);
     }
 }

@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class QuestionServiceTest {
+class QuestionServiceTest {
 
     @Mock
     private QuestionRepository questionRepository;
@@ -25,7 +25,7 @@ public class QuestionServiceTest {
     private QuestionService questionService;
 
     @Test
-    public void testAddQuestion() {
+    void testAddQuestion() {
         QuestionCreateRequest request = new QuestionCreateRequest("Test Title", "Test Content", UUID.randomUUID());
         Question savedQuestion = Question.builder()
                 .id(UUID.randomUUID())
@@ -46,7 +46,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void testGetQuestionById() {
+    void testGetQuestionById() {
         UUID questionId = UUID.randomUUID();
         Question question = Question.builder()
                 .id(questionId)
@@ -66,7 +66,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void testDeleteQuestion() {
+    void testDeleteQuestion() {
         UUID questionId = UUID.randomUUID();
 
         questionService.deleteQuestion(questionId);
@@ -75,7 +75,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void testSearchQuestions() {
+    void testSearchQuestions() {
         String keyword = "Test";
         List<Question> questions = List.of(
                 new Question(UUID.randomUUID(), "Test Title", "Test Content", LocalDateTime.now(), UUID.randomUUID()),
@@ -90,7 +90,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void testGetAllQuestions() {
+    void testGetAllQuestions() {
         List<Question> questions = List.of(
                 new Question(UUID.randomUUID(), "Title 1", "Content 1", LocalDateTime.now(), UUID.randomUUID()),
                 new Question(UUID.randomUUID(), "Title 2", "Content 2", LocalDateTime.now(), UUID.randomUUID())
@@ -104,7 +104,7 @@ public class QuestionServiceTest {
     }
 
     @Test
-    public void testGetQuestionsByOwnerId() {
+    void testGetQuestionsByOwnerId() {
         UUID ownerId = UUID.randomUUID();
         List<Question> questions = List.of(
                 new Question(UUID.randomUUID(), "Title 1", "Content 1", LocalDateTime.now(), ownerId)
