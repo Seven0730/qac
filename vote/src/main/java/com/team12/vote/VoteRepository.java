@@ -11,4 +11,5 @@ public interface VoteRepository extends MongoRepository<Vote, UUID> {
     Optional<Vote> findByUserIdAndPostId(UUID userId, UUID postId);
     int countByPostIdAndVoteValue(UUID postId, int voteValue);
     void deleteByUserIdAndPostId(UUID userId, UUID postId);
+    void deleteByPostId(UUID postId);
 }

@@ -14,21 +14,21 @@ import java.util.List;
 @RequestMapping("/api/v1/search")
 public class SearchController {
 
-    private final SearchService searchService;
+    private final SearchFacade searchFacade;
 
-    public SearchController(SearchService searchService) {
-        this.searchService = searchService;
+    public SearchController(SearchFacade searchFacade) {
+        this.searchFacade = searchFacade;
     }
 
     @GetMapping("/questions")
     public ResponseEntity<List<QuestionDto>> searchQuestions(@RequestParam String keyword) {
-        List<QuestionDto> result = searchService.searchQuestionsByKeyword(keyword);
+        List<QuestionDto> result = searchFacade.searchQuestionsByKeyword(keyword);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> searchUsers(@RequestParam String keyword) {
-        List<UserDto> result = searchService.searchUsersByUsername(keyword);
+        List<UserDto> result = searchFacade.searchUsersByUsername(keyword);
         return ResponseEntity.ok(result);
     }
 }

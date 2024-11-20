@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @EnableFeignClients(basePackages = "com.team12.clients")
-public class SearchService {
+public class SearchFacade {
 
     private final QnAClient qnaClient;
     private final UserClient userClient;
 
-    public SearchService(QnAClient qnaClient, UserClient userClient) {
+    public SearchFacade(QnAClient qnaClient, UserClient userClient) {
         this.qnaClient = qnaClient;
         this.userClient = userClient;
     }

@@ -28,7 +28,7 @@ class SearchControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private SearchService searchService;
+    private SearchFacade searchFacade;
 
     private List<QuestionDto> mockQuestions;
     private List<UserDto> mockUsers;
@@ -51,7 +51,7 @@ class SearchControllerTest {
     @Test
     void testSearchQuestions() throws Exception {
         // Mock searchService to return mockQuestions when searchQuestionsByKeyword is called
-        Mockito.when(searchService.searchQuestionsByKeyword(anyString())).thenReturn(mockQuestions);
+        Mockito.when(searchFacade.searchQuestionsByKeyword(anyString())).thenReturn(mockQuestions);
 
         // Perform a GET request to /search/questions with a keyword parameter
         mockMvc.perform(get("/api/v1/search/questions")
@@ -70,7 +70,7 @@ class SearchControllerTest {
     @Test
     void testSearchUsers() throws Exception {
         // Mock searchService to return mockUsers when searchUsersByUsername is called
-        Mockito.when(searchService.searchUsersByUsername(anyString())).thenReturn(mockUsers);
+        Mockito.when(searchFacade.searchUsersByUsername(anyString())).thenReturn(mockUsers);
 
         // Perform a GET request to /search/users with a keyword parameter
         mockMvc.perform(get("/api/v1/search/users")
