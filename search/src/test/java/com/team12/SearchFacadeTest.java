@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-class SearchServiceTest {
+class SearchFacadeTest {
 
     @Mock
     private QnAClient qnaClient;
@@ -25,7 +25,7 @@ class SearchServiceTest {
     private UserClient userClient;
 
     @InjectMocks
-    private SearchService searchService;
+    private SearchFacade searchFacade;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +41,7 @@ class SearchServiceTest {
         QuestionDto questionDto = new QuestionDto(questionId, "Test Title", "Test Content", ownerId);
         when(qnaClient.searchQuestions(keyword)).thenReturn(List.of(questionDto));
 
-        List<QuestionDto> result = searchService.searchQuestionsByKeyword(keyword);
+        List<QuestionDto> result = searchFacade.searchQuestionsByKeyword(keyword);
 
         assertEquals(1, result.size());
         assertEquals(questionDto, result.get(0));
@@ -55,7 +55,7 @@ class SearchServiceTest {
         UserDto userDto = new UserDto(userId, "username", "user@example.com");
         when(userClient.searchUsersByUsername(keyword)).thenReturn(List.of(userDto));
 
-        List<UserDto> result = searchService.searchUsersByUsername(keyword);
+        List<UserDto> result = searchFacade.searchUsersByUsername(keyword);
 
         assertEquals(1, result.size());
         assertEquals(userDto, result.get(0));
